@@ -1,0 +1,22 @@
+{
+	"BUILD_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/calendar_autogen",
+	"CMAKE_BINARY_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar",
+	"CMAKE_SOURCE_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar",
+	"CROSS_CONFIG" : false,
+	"GENERATOR" : "Ninja",
+	"INCLUDE_DIR" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/calendar_autogen/include",
+	"INPUTS" : [],
+	"LOCK_FILE" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/calendar_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resources" ],
+	"OUTPUT_CHECKSUM" : "3YJK5W5UP7",
+	"OUTPUT_NAME" : "qrc_resources.cpp",
+	"RCC_EXECUTABLE" : "/home/aiot101/Qt/6.9.1/gcc_64/libexec/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/calendar_autogen.dir/AutoRcc_resources_3YJK5W5UP7_Used.txt",
+	"SOURCE" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendar/resources/resources.qrc",
+	"USE_BETTER_GRAPH" : true,
+	"VERBOSITY" : 0
+}

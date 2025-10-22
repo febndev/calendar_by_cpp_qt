@@ -1,0 +1,22 @@
+# ninja log v6
+6	34	1755566902360842209	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/mocs_compilation.cpp	ff7de9aac3e1d3f4
+13	20	1755563109747613725	clean	4a84f2a28dcf5df1
+35	3284	1755566902390533753	CMakeFiles/calendarClient.dir/logo.cpp.o	9f8eea0be11bdd51
+34	3649	1755566902389907388	CMakeFiles/calendarClient.dir/logindialog.cpp.o	46a904a44e81eea7
+9	601	1755570337283932518	build.ninja	7210649de35e1865
+5181	5700	1755566907535874056	calendarClient	942048b72dc3e409
+34	4932	1755566902388842382	CMakeFiles/calendarClient.dir/calendarwidget.cpp.o	d30095564961d3d5
+35	3993	1755566902390313496	CMakeFiles/calendarClient.dir/signupdialog.cpp.o	9f298ad583cd4125
+35	3155	1755566902390736834	CMakeFiles/calendarClient.dir/eventdialog.cpp.o	c651f2728e9ae112
+1518	6738	1755563208282901590	CMakeFiles/calendarClient.dir/tcpclient.cpp.o	ad57be5f5b275e0
+1499	1518	1755563208279853451	calendarClient_autogen/EWIEGA46WW/qrc_resources.cpp	45fbe1c6f294a821
+1499	1518	1755563208279853451	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/EWIEGA46WW/qrc_resources.cpp	45fbe1c6f294a821
+439	6386	1755566519785252742	CMakeFiles/calendarClient.dir/calendarClient_autogen/mocs_compilation.cpp.o	a785ab0ff905950c
+6	13	1755563109740613708	CMakeFiles/clean.additional	6de0fcfde1c624ea
+35	3134	1755566902390092343	CMakeFiles/calendarClient.dir/addcalendardialog.cpp.o	d1df9b14c0579798
+6	34	1755566902360842209	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/timestamp	ff7de9aac3e1d3f4
+6	34	1755566902360842209	calendarClient_autogen/timestamp	ff7de9aac3e1d3f4
+439	5998	1755566519786414683	CMakeFiles/calendarClient.dir/main.cpp.o	e356bd4d9d3de4bd
+36	5181	1755566902390842394	CMakeFiles/calendarClient.dir/mainwindow.cpp.o	d9c397a8a98ac98b
+5204	5450	1755563211967862426	CMakeFiles/calendarClient.dir/calendarClient_autogen/EWIEGA46WW/qrc_resources.cpp.o	daef0a08ccf53d7a
+6	34	1755566902360842209	calendarClient_autogen/mocs_compilation.cpp	ff7de9aac3e1d3f4

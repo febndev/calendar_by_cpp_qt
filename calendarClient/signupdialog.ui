@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SignUpDialog</class>
+ <widget class="QDialog" name="SignUpDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>150</y>
+     <width>321</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="signIDLabel">
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QLineEdit" name="userEmailLineEdit"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="useremail">
+      <property name="text">
+       <string>E-Mail</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLineEdit" name="signpw2LineEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="signpwLabel">
+      <property name="text">
+       <string>PW</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1" colspan="2">
+     <widget class="QLineEdit" name="usernameLineEdit"/>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QLineEdit" name="signpwLineEdit"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="username">
+      <property name="text">
+       <string>이름</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" colspan="2">
+     <widget class="QLineEdit" name="signIDLineEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="signpw2Label">
+      <property name="text">
+       <string>PW 확인</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="levelLabel">
+      <property name="text">
+       <string>직급</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="QComboBox" name="levelComboBox">
+      <item>
+       <property name="text">
+        <string>사원</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>대리</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>과장</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>부장</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="10" column="0">
+     <widget class="QPushButton" name="cancelClicked">
+      <property name="text">
+       <string>돌아가기</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1" colspan="2">
+     <widget class="QPushButton" name="okButton">
+      <property name="text">
+       <string>회원가입</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

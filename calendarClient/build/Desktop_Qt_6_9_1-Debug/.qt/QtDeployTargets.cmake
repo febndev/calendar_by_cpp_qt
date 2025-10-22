@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_calendarClient_FILE /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient)
+set(__QT_DEPLOY_TARGET_calendarClient_TYPE EXECUTABLE)

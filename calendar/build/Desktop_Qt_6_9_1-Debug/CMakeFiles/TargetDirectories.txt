@@ -1,0 +1,9 @@
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/calendar.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/edit_cache.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/rebuild_cache.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/list_install_components.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/install.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/install/local.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/install/strip.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/calendar_autogen_timestamp_deps.dir
+/home/aiot101/바탕화면/calendarApp/calendar/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/calendar_autogen.dir
