@@ -40,16 +40,28 @@ template <> constexpr inline auto EventDialog::qt_create_metaobjectdata<qt_meta_
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
         "EventDialog",
-        "setCalendars",
+        "addEventRequested",
         "",
-        "calendars"
+        "byteArray",
+        "setCalendars",
+        "calendars",
+        "onSubmitButtonClicked",
+        "onCancelButtonClicked"
     };
 
     QtMocHelpers::UintData qt_methods {
-        // Slot 'setCalendars'
-        QtMocHelpers::SlotData<void(const QStringList &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QStringList, 3 },
+        // Signal 'addEventRequested'
+        QtMocHelpers::SignalData<void(const QByteArray &)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QByteArray, 3 },
         }}),
+        // Slot 'setCalendars'
+        QtMocHelpers::SlotData<void(const QStringList &)>(4, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QStringList, 5 },
+        }}),
+        // Slot 'onSubmitButtonClicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onCancelButtonClicked'
+        QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -73,9 +85,16 @@ void EventDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     auto *_t = static_cast<EventDialog *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->setCalendars((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
+        case 0: _t->addEventRequested((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
+        case 1: _t->setCalendars((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
+        case 2: _t->onSubmitButtonClicked(); break;
+        case 3: _t->onCancelButtonClicked(); break;
         default: ;
         }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (EventDialog::*)(const QByteArray & )>(_a, &EventDialog::addEventRequested, 0))
+            return;
     }
 }
 
@@ -98,15 +117,21 @@ int EventDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 1;
+        _id -= 4;
     }
     return _id;
+}
+
+// SIGNAL 0
+void EventDialog::addEventRequested(const QByteArray & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1);
 }
 QT_WARNING_POP

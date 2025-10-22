@@ -117,7 +117,7 @@
      </widget>
     </item>
     <item row="10" column="1">
-     <widget class="QPushButton" name="btnCancel">
+     <widget class="QPushButton" name="cancelButton">
       <property name="text">
        <string>취소</string>
       </property>
@@ -140,7 +140,7 @@
      </spacer>
     </item>
     <item row="10" column="3">
-     <widget class="QPushButton" name="btnSubmit">
+     <widget class="QPushButton" name="submitButton">
       <property name="text">
        <string>일정 추가 / 수정</string>
       </property>
@@ -192,7 +192,7 @@
         <hour>0</hour>
         <minute>0</minute>
         <second>1</second>
-        <year>2001</year>
+        <year>2002</year>
         <month>1</month>
         <day>1</day>
        </datetime>
@@ -241,7 +241,7 @@
     <item row="8" column="1" colspan="3">
      <widget class="QLabel" name="lblHint">
       <property name="text">
-       <string>TextLabel</string>
+       <string/>
       </property>
      </widget>
     </item>

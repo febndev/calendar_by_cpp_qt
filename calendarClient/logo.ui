@@ -16,7 +16,7 @@
   <widget class="QLabel" name="logoLabel">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>320</x>
      <y>140</y>
      <width>66</width>
      <height>18</height>
@@ -26,11 +26,11 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>480</y>
+     <x>560</x>
+     <y>660</y>
      <width>140</width>
      <height>78</height>
     </rect>

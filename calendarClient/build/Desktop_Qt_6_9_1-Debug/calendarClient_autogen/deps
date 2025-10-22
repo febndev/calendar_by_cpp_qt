@@ -1,11 +1,13 @@
 calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDate \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDateTime \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDebug \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QFile \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonArray \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonDocument \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonParseError \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonValue \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMap \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMetaType \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QObject \

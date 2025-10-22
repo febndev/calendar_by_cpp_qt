@@ -54,6 +54,8 @@ private:
                               int inviterCode, QString* err);
     void notifyUserCalendarsDirty(int userCode); // 알림 브로드캐스트
     void sendCalendarTotalList(QTcpSocket* socket, int userCode);
+    // JSON으로 보낸 일정 들 추가로
+    void sendAddEventResp(QTcpSocket* socket, bool ok, const QVariant& insertId);
 
 
 signals:

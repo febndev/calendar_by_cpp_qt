@@ -134,19 +134,26 @@ void Server::slot_readSocket()
     // stream으로 데이터를 읽어들이고, buffer로 넘기면
     socketStream.startTransaction();
     socketStream >> buffer;
-    // 0819 [DB] 이거 때문에 오류가 났었던 것 같은데 또 넣네.
     if (!socketStream.commitTransaction()) {
         qDebug() << "[SERVER] waiting for more data...";
         return;
     }
-    // 0819 찝찝한 코드 넣기 끝
 
     // '\0' 패딩과 공백 제거 유틸
     auto stripPad = [](QString s) {
         s.replace(QChar('\0'), QChar(' '));
         return s.trimmed();
     };
-
+    /* 챗지피티 코드
+    QString header = stripPad(QString::fromUtf8(buffer.mid(0, 128)));
+    // "type:xxx,name:...,size:n" → type만 안전하게 추출
+    QString typePart = header.section(',', 0, 0);          // "type:xxx"
+    QString type     = typePart.section(':', 1).trimmed(); // "xxx"
+    // 128B~: 본문(요청별 포맷 상이: 기존 login/signup/addCal 등은 '|' 구분,
+    // add_event는 JSON 한 줄)
+    QByteArray bodyBytes = buffer.mid(128);
+    QString body   = QString::fromUtf8(bodyBytes);
+*/
     // client 에서 보낸 payload(순수한 데이터, 전달 메시지)를
     // buffer에서 처음 128 byte 부분만 읽어들여서 header 에 담고 type을 찾는다.
     QString header = stripPad(buffer.mid(0,128));
@@ -154,10 +161,11 @@ void Server::slot_readSocket()
 
     // buffer의 128 byte 이후 부분을
     // QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+    QByteArray bodyBytes = buffer.mid(128);
+
     QString body = QString::fromUtf8(buffer.mid(128));
     qDebug() << "body =" << body;
     qDebug() << "body after stripPad =" << stripPad(body);
-
 
     QString id;
     QString pw;
@@ -180,7 +188,9 @@ void Server::slot_readSocket()
         // DB 에서 비교 후 클라이언트에게 전송
         QSqlDatabase db = QSqlDatabase::database();
         QSqlQuery q(db);
+        // 안전하게 값을 추출, 비교하기 위해서 쿼리문 준비
         q.prepare("SELECT code, pw FROM users WHERE id = ?");
+        //사용자가 입력한 id 값을 바인딩 해서 쿼리문 물음표 자리에 넣는다.
         q.addBindValue(id);
 
         if (!q.exec()){
@@ -192,20 +202,20 @@ void Server::slot_readSocket()
             sendErrorToClient(socket, "NO_USER");
             return;
         }
-
+        //DB에서 패스워드 가져와서 문자열로 변환, code 값은 숫자로 변환
         QString dbPw = q.value("pw").toString();
         const int userCode = q.value("code").toInt();
         if (pw == dbPw){
-
+            // 로그인에 성공하면 m_userBySocket에 소켓과 user테이블의 code값을 넣어놓음.
             m_userBySocket.insert(socket, userCode);
             qDebug() << "로그인성공!";
-
             qDebug() << "[LOGIN] map set"
                      << "socket=" << socket
                      << "userCode=" << userCode;
-
+            //로그인 성공 메시지 보낸 후(시그널 포함)
             sendOkToClient(socket, "LOGIN_OK");
-            sendCalendarList(socket, userCode);
+            //달력 리스트도 보낸다.
+            sendCalendarTotalList(socket, userCode);
         } else {
             sendErrorToClient(socket, "WRONG_PASSWORD");
         }
@@ -341,6 +351,92 @@ void Server::slot_readSocket()
         // 캘린더 초대 함수 실행
         inviteUserToCalendar(calId, inviteeLoginId, inviterCode, &err);
     }
+    else if (type == "cal_list_req"){
+        int userid = m_userBySocket.value(socket, 0);
+        sendCalendarList(socket, userid);
+    }
+    else if (type == "add_event"){
+        qDebug() << "일정 추가 시작";
+        // 한 줄만 추출
+        const int eol = bodyBytes.indexOf('\n');
+        if (eol < 0) { sendAddEventResp(socket, /*ok=*/false, QVariant()); return; }
+        const QByteArray line = bodyBytes.left(eol);
+
+        QJsonParseError jerr;
+        const QJsonDocument doc = QJsonDocument::fromJson(line, &jerr);
+        if (jerr.error != QJsonParseError::NoError || !doc.isObject()) {
+            qWarning() << "[SERVER] add_event JSON parse error:" << jerr.errorString() << "line:" << line;
+            sendAddEventResp(socket, /*ok=*/false, QVariant());
+            return;
+        }
+        const QJsonObject obj = doc.object();
+
+        // 필수 필드 확인
+        if (!obj.contains("calendarId") || !obj.contains("title")
+            || !obj.contains("start_time") || !obj.contains("end_time"))
+        {
+            sendAddEventResp(socket, /*ok=*/false, QVariant());
+            return;
+        }
+
+        const int calendarId     = obj.value("calendarId").toInt();
+        const QString title      = obj.value("title").toString();
+        const QString memo       = obj.value("memo").toString();
+        const QString start_time = obj.value("start_time").toString();
+        const QString end_time   = obj.value("end_time").toString();
+
+        QSqlDatabase db = QSqlDatabase::database();
+        if (!db.isValid() || !db.isOpen()) {
+            sendAddEventResp(socket, /*ok=*/false, QVariant());
+            return;
+        }
+
+        QSqlQuery q(db);
+        q.prepare(R"(
+            INSERT INTO events (calendar_id, title, memo, start_time, end_time)
+            VALUES (?, ?, ?, ?, ?)
+        )");
+        q.addBindValue(calendarId);
+        q.addBindValue(title);
+        q.addBindValue(memo);
+        q.addBindValue(start_time);
+        q.addBindValue(end_time);
+
+        if (!q.exec()) {
+            qWarning() << "[SERVER] add_event insert error:" << q.lastError();
+            sendAddEventResp(socket, /*ok=*/false, QVariant());
+            return;
+        }
+
+        const QVariant newId = q.lastInsertId();
+        sendAddEventResp(socket, /*ok=*/true, newId);
+    }
+}
+
+void Server::sendAddEventResp(QTcpSocket* socket, bool ok, const QVariant& insertId)
+{
+    QByteArray header = QString("type:add_event_resp,name:null,size:1").toUtf8();
+    header.resize(128);
+
+    QJsonObject obj;
+    obj["result"]   = ok ? QStringLiteral("CREATE_OK") : QStringLiteral("ERROR");
+    if (ok && insertId.isValid()) obj["event_id"] = insertId.toLongLong();
+    else                          obj["event_id"] = QJsonValue::Null;
+
+    QByteArray line = QJsonDocument(obj).toJson(QJsonDocument::Compact);
+    line += '\n';
+
+    QByteArray out;
+    out.reserve(128 + line.size());
+    out.append(header);
+    out.append(line);
+
+    QDataStream ds(socket);
+    ds.setVersion(QDataStream::Qt_6_0);
+    ds << out;
+
+    socket->flush();
+    socket->waitForBytesWritten(3000);
 }
 
 
@@ -349,7 +445,6 @@ void Server::slot_readSocket()
 // 시간 남으면 이 함수랑 위에 함수랑 합치고 싶다
 void Server::sendCalendarTotalList(QTcpSocket* m_socket, int userCode)
 {
-    // stream으로 보내기
     QDataStream socketStream(m_socket);
     socketStream.setVersion(QDataStream::Qt_6_0);
 
@@ -363,64 +458,44 @@ void Server::sendCalendarTotalList(QTcpSocket* m_socket, int userCode)
         WHERE cm.user_id = ?
         ORDER BY c.id ASC
     )");
-    q.addBindValue(userCode); // DB상 고유한 user tbl 의 code 컬럼
+    q.addBindValue(userCode);
 
-    // 실패 실행했을 경우 err에 에러메시지 전달
     if (!q.exec()) {
-        qDebug() << "[SERVER] cal_list query error:" << q.lastError();
-        QByteArray err = QByteArray("cal_total_list\t0\n"); // 비어있다고 응답
-        m_socket->write(err);
-        m_socket->flush();
-        return;
+        qWarning() << "[SERVER] cal_total_list query error:" << q.lastError();
     }
-
-    // 값들을 반복해서 가져옴.
-    QJsonArray calLists;
+    // 결과 → 본문 줄(JSON 객체)
+    QList<QJsonObject> rows;
     while (q.next()) {
-        // 하나의 달력의 값들을 가져와서 각 변수에 저장
-        const int id = q.value(0).toInt();  //calID
-        const QString name    = q.value(1).toString();  // calName
-        const QString color   = q.value(2).toString();  // "#RRGGBB"
-        const int     canEdit = q.value(3).toInt();     // 0/1
-        // 하나의 Json객체를 만들어서
-        QJsonObject calListValue;
-        calListValue["id"] = id;
-        calListValue["name"] = name;
-        calListValue["color"] = color;
-        calListValue["can_edit"] = (canEdit != 0);
-        // 배열에 추가
-        calLists.append(calListValue);
+        QJsonObject o;
+        o["id"]       = q.value(0).toInt();
+        o["name"]     = q.value(1).toString();
+        o["color"]    = q.value(2).toString();
+        o["can_edit"] = (q.value(3).toInt() != 0);
+        rows.append(o);
     }
 
-    //ByteArray 형태로 클라이언트 한테 전송할 준비
-    // header 만들기
-    QString header;
+    // 1) 헤더 128바이트
+    QByteArray out;
+    QByteArray header = QString("type:cal_total_list,name:null,size:%1")
+                            .arg(rows.size()).toUtf8();
+    header.resize(128);                     // 널/공백 패딩 유지 (클라에서 stripPad로 처리)
+    out.append(header);
 
-    // 여기부터 수정해야함.
-    // headerstr.prepend(QString("type:cal_total_list,name:null,size:%1")
-    //                       .arg(size(calLists)).toUtf8());
-    // calLists 는 QJonObject기 때문에 calLists.size()로 적어야함.
-    header.prepend(QString("type:cal_total_list,name:null,size:%1")
-                          .arg(calLists.size()).toUtf8());
-    header.resize(128);
+    // 2) 본문: 객체 한 줄씩
+    for (const auto& o : rows) {
+        QByteArray line = QJsonDocument(o).toJson(QJsonDocument::Compact);
+        line += '\n';
+        out.append(line);
+    }
 
-    // 캘린더 리스트에 헤더 합치기
-    QJsonObject addHeader;
-    addHeader["type"] = header;
-    addHeader["body"] = calLists;
+    // 3) 전송 (QDataStream 프레이밍 유지)
 
-    //QJsonDocument로 저장, toJson으로 변환 후 네트워크 통신용으로 개행문자 추가
-    QByteArray byteArray = QJsonDocument(addHeader).toJson(QJsonDocument::Compact);
-    byteArray += '\n';
-
-    // 소켓으로 전송
-    socketStream << byteArray;
+    socketStream << out;
     m_socket->flush();
     m_socket->waitForBytesWritten(3000);
-
 }
 
-// userCode 꺼내 쓰기 위해서 만든 함수
+// 중요하구만 userCode 꺼내 쓰기 위해서 만든 함수
 int Server::userCodeOf(QTcpSocket* sock) const
 {
     return m_userBySocket.value(sock, -1); // -1: 비로그인/없음
@@ -575,7 +650,7 @@ void Server::sendOkToClient(QTcpSocket *clientSocket, const QString &okMsg) {
     } else if (okMsg == "SIGNUP_OK") {
         header.prepend(QString("type:signup_resp,name:null,size:%1").arg(okMsg.size()).toUtf8());
     } else if (okMsg == "CREATE_OK") {
-        header.prepend(QString("type:cal_resp,name:null,size%1").arg(okMsg.size()).toUtf8());
+        header.prepend(QString("type:cal_resp,name:null,size:%1").arg(okMsg.size()).toUtf8());
     }
 
     header.resize(128);

@@ -119,9 +119,9 @@ private:
     //0819 [우 Dock] 오른쪽 Dock 구성하는 함수
     void setupRightDock();
     // 0819 달력 왼쪽 도크 새로고침
+    QStringList m_calNameCache; // 최신 캘린더 이름 목록 캐시
     QList<CalendarInfo> m_calCache; // 최신목록 캐시
     void refreshCalendars(); //
-    void loadCalendarsFromQStringList(const QStringList& names);
     // 0820 캘린더 id 를 가져오는 함수
     int currentSelectedCalId() const;
 

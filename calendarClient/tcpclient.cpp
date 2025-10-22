@@ -179,20 +179,23 @@ void TcpClient::slot_readSocket()
 
     // 캘린더 목록, 값 가져오기
     // JSon 으로 받아서 다시 lst 만들어야되나.. ?
-    else if (type == "cal_list")
+    else if (type == "cal_total_list")
     {
         QByteArray body = buffer.mid(128);
+
         qDebug() << "[클라이언트] Body:" << body;
         QJsonDocument doc;
         QList<CalendarInfo> calList;
         QStringList calNameList;
         while (true) {
+            qDebug() <<"JSON 파싱 시작";
             int eol = body.indexOf('\n');
             if (eol < 0) {
                 // 더 이상 완전한 한 줄이 없으면 루프 종료
                 break;
             }
             QByteArray line = body.left(eol);
+            qDebug() << "JSon 한줄: "<< line;
             body.remove(0, eol + 1);
 
             // 빈 라인은 건너 뛰기
@@ -221,7 +224,7 @@ void TcpClient::slot_readSocket()
             QString colorHex = obj.value("color").toString("#787878");
             QColor color(colorHex);
             ci.color = color.isValid() ? color : QColor(120,120,120);
-
+            // 이부분 다시 봐야함. role은 직급이고 can_Edit은 캘린더 멤버 테이블의 값임.-_-?
             if (obj.contains("role"))
                 ci.role = obj.value("role").toString();
             else
@@ -233,12 +236,28 @@ void TcpClient::slot_readSocket()
 
             calList.append(ci);
             calNameList.append(ci.name);
+
+            // 제대로 파싱되고 있는지 확인하는 코드
+            qDebug() << "[PARSED]"
+                     << "id:"        << ci.id
+                     << "name:"      << ci.name
+                     << "color:"     << ci.color.name(QColor::HexRgb)
+                     << "role:"      << ci.role
+                     << "can_Edit:"  << ci.can_Edit;
         }
 
-        emit calendarListUpdated(calList);
+        qDebug() << "[EMIT] calendarListUpdated count =" << calList.size();
+        emit calendarTotalListUpdated(calList);
+    } else if(type == "cal_list") {
 
-        // 여기서 캘린더이름 목록 만들어서 업데이트하기
-        emit calendarNameListUpdated(calNameList);
+        QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+
+        const QStringList list = body.split("|", Qt::SkipEmptyParts);
+        qDebug() << list;
+        emit calendarListUpdated(list);
+
+        qDebug() << "[클라이언트] Body:" << list;
+
     }
 }
 
@@ -442,11 +461,74 @@ quint32 TcpClient::requestMonthCounts(const QDate& from, const QDate& to, const 
     return reqId;
 }
 
+// 0822 캘린더 목록 요청하는 함수
+void TcpClient::sendCalendarListRequest(){
+    if(m_socket){
+        if(m_socket->isOpen()){
+            qDebug() << "[TcpClient] requestCalendarList() ENTER";
+
+            QString body = QString("달력요청");
+            QDataStream socketStream(m_socket);
+            socketStream.setVersion(QDataStream::Qt_6_0);
+
+            QByteArray header;
+            header.prepend(QString("type:cal_list_req,name:null,size:%1")
+                               .arg(body.size())
+                               .toUtf8());
+            header.resize(128); // 고정 길이 패딩('\0')
+
+            QByteArray byteArray = body.toUtf8();
+            byteArray.prepend(header);
+
+
+            socketStream << byteArray;
+
+            m_socket->flush();
+            m_socket->waitForBytesWritten(3000);
+
+            qDebug() << "[TcpClient] requestCalendarList sent"
+                     << " bytes=" << byteArray.size()
+                     << " sockState=" << m_socket->state();
+        }
+        else
+            QMessageBox::critical(this, "QTCPClient", "Socket doesn't seem to be opened");
+    }
+    else
+        QMessageBox::critical(this, "QTCPClient", "Not connected");
+}
+
+void TcpClient::sendAddEventRequest(const QByteArray& byteArray){
+    if(m_socket){
+        if(m_socket->isOpen()){
+            qDebug() << "[TcpClient] sendAddEventRequest() ENTER";
+
+            QDataStream socketStream(m_socket);
+            socketStream.setVersion(QDataStream::Qt_6_0);
+
+
+            socketStream << byteArray;
+
+            m_socket->flush();
+            m_socket->waitForBytesWritten(3000);
+
+            qDebug() << "[TcpClient] requestCalendarList sent"
+                     << " bytes=" << byteArray.size()
+                     << " sockState=" << m_socket->state();
+        }
+        else
+            QMessageBox::critical(this, "QTCPClient", "Socket doesn't seem to be opened");
+    }
+    else
+        QMessageBox::critical(this, "QTCPClient", "Not connected");
+}
+
+
+// 0822 이거 지우고 싶은데... 간단하게 리스트만 불러온다고 만들었던 건데..
 // void TcpClient::slot_calLstReadyRead(){
 
 //     QByteArray data = m_socket->readAll();
 //     QString msg = QString::fromUtf8(data);
-
+//     qDebug() << "slot_calLstReadyRead() 실행: "<< msg;
 //     // 서버에서 "캘린더1|캘린더2|캘린더3" 형식으로 보내주는 걸 리스트에 저장
 //     QStringList calendars = msg.split("|", Qt::SkipEmptyParts);
 

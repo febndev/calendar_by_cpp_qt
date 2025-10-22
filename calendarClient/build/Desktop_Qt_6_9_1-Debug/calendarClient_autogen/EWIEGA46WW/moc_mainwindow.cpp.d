@@ -1,6 +1,7 @@
 /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/aiot101/바탕화면/calendarApp/calendarClient/mainwindow.h \
   /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/moc_predefs.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMetaType \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QString \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q17memory.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20functional.h \

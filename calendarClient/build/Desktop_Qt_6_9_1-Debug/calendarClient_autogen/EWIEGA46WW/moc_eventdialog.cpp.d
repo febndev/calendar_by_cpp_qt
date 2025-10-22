@@ -1,6 +1,12 @@
 /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/EWIEGA46WW/moc_eventdialog.cpp: /home/aiot101/바탕화면/calendarApp/calendarClient/eventdialog.h \
   /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/moc_predefs.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDate \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDateTime \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonArray \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonDocument \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonParseError \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonValue \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QStringList \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q17memory.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20functional.h \
@@ -24,6 +30,8 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearraylist.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearrayview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcalendar.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborcommon.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborvalue.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qchar.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare_impl.h \
@@ -54,6 +62,11 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiodevicebase.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterable.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterator.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonarray.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsondocument.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonobject.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonparseerror.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonvalue.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlatin1stringview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qline.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlist.h \
@@ -78,6 +91,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qprocessordetection.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qrect.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qrefcount.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qregularexpression.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qscopedpointer.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qscopeguard.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qset.h \
@@ -126,6 +140,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtypes.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qurl.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qutf8stringview.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/quuid.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvariant.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvarlengtharray.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qversiontagging.h \

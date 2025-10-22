@@ -40,8 +40,10 @@ public:
                             const QString &useremail,
                             const QString &level);
     void sendAddCalRequest(const QString& name, bool is_Public);
-    //캘린더 목록 요청 함수
-    void requestCalendarList();
+    // 캘린더 목록 요청 함수
+    void sendCalendarListRequest();
+    // 일정 추가 요청 함수
+    void sendAddEventRequest(const QByteArray& byteArray);
 
     // 0818 [API] 현재 연결 여부 (중복인지 검토 필요)
     bool isConnected() const;
@@ -72,8 +74,8 @@ signals:
     void addCalSuccess();
     void addCalFailed(const QString& errorMessage);
     // 캘린더 목록 업데이트용.
-    void calendarListUpdated(const QList<CalendarInfo> calList); // Eventdialog에 알려줌
-    void calendarNameListUpdated(const QStringList calNameList);
+    void calendarTotalListUpdated(const QList<CalendarInfo> calList); // Eventdialog에 알려줌
+    void calendarListUpdated(const QStringList calNameList);
 
     //0820 캘린더 공유용 시그널
     void inviteCalSuccess();
@@ -94,7 +96,7 @@ private slots:
     void slot_discardSocket();
     void slot_displayError(QAbstractSocket::SocketError socketError);
     void slot_readSocket();
-    void slot_calLstReadyRead();
+    //void slot_calLstReadyRead();
 
 };
 

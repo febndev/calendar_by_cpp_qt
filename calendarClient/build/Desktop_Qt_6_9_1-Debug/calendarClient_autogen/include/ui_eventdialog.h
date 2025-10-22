@@ -37,9 +37,9 @@ public:
     QSpacerItem *verticalSpacer_2;
     QSpacerItem *horizontalSpacer_2;
     QLabel *titleLabel;
-    QPushButton *btnCancel;
+    QPushButton *cancelButton;
     QSpacerItem *horizontalSpacer_3;
-    QPushButton *btnSubmit;
+    QPushButton *submitButton;
     QComboBox *cmbCalendar;
     QPlainTextEdit *txtMemo;
     QSpacerItem *horizontalSpacer;
@@ -100,21 +100,21 @@ public:
 
         gridLayout->addWidget(titleLabel, 1, 1, 1, 1);
 
-        btnCancel = new QPushButton(gridLayoutWidget);
-        btnCancel->setObjectName("btnCancel");
-        btnCancel->setAutoDefault(false);
+        cancelButton = new QPushButton(gridLayoutWidget);
+        cancelButton->setObjectName("cancelButton");
+        cancelButton->setAutoDefault(false);
 
-        gridLayout->addWidget(btnCancel, 10, 1, 1, 1);
+        gridLayout->addWidget(cancelButton, 10, 1, 1, 1);
 
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
         gridLayout->addItem(horizontalSpacer_3, 9, 1, 1, 1);
 
-        btnSubmit = new QPushButton(gridLayoutWidget);
-        btnSubmit->setObjectName("btnSubmit");
-        btnSubmit->setAutoDefault(false);
+        submitButton = new QPushButton(gridLayoutWidget);
+        submitButton->setObjectName("submitButton");
+        submitButton->setAutoDefault(false);
 
-        gridLayout->addWidget(btnSubmit, 10, 3, 1, 1);
+        gridLayout->addWidget(submitButton, 10, 3, 1, 1);
 
         cmbCalendar = new QComboBox(gridLayoutWidget);
         cmbCalendar->setObjectName("cmbCalendar");
@@ -142,7 +142,7 @@ public:
 
         dateTimeEdit = new QDateTimeEdit(gridLayoutWidget);
         dateTimeEdit->setObjectName("dateTimeEdit");
-        dateTimeEdit->setDateTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0, 1)));
+        dateTimeEdit->setDateTime(QDateTime(QDate(2002, 1, 1), QTime(0, 0, 1)));
         dateTimeEdit->setMaximumDateTime(QDateTime(QDate(2100, 12, 31), QTime(23, 59, 59)));
         dateTimeEdit->setMinimumDateTime(QDateTime(QDate(1970, 9, 14), QTime(0, 0, 0)));
         dateTimeEdit->setCalendarPopup(true);
@@ -161,7 +161,7 @@ public:
 
         retranslateUi(EventDialog);
 
-        btnSubmit->setDefault(true);
+        submitButton->setDefault(true);
 
 
         QMetaObject::connectSlotsByName(EventDialog);
@@ -174,12 +174,12 @@ public:
         dateTimeEdit_2->setDisplayFormat(QCoreApplication::translate("EventDialog", "yyyy- MM -dd HH:mm", nullptr));
         memoLabel->setText(QCoreApplication::translate("EventDialog", "\353\251\224\353\252\250", nullptr));
         titleLabel->setText(QCoreApplication::translate("EventDialog", "\354\235\274\354\240\225 \354\240\234\353\252\251", nullptr));
-        btnCancel->setText(QCoreApplication::translate("EventDialog", "\354\267\250\354\206\214", nullptr));
-        btnSubmit->setText(QCoreApplication::translate("EventDialog", "\354\235\274\354\240\225 \354\266\224\352\260\200 / \354\210\230\354\240\225", nullptr));
+        cancelButton->setText(QCoreApplication::translate("EventDialog", "\354\267\250\354\206\214", nullptr));
+        submitButton->setText(QCoreApplication::translate("EventDialog", "\354\235\274\354\240\225 \354\266\224\352\260\200 / \354\210\230\354\240\225", nullptr));
         startLabel->setText(QCoreApplication::translate("EventDialog", "\354\213\234\354\236\221", nullptr));
         cmbCalLabel->setText(QCoreApplication::translate("EventDialog", "\354\272\230\353\246\260\353\215\224", nullptr));
         dateTimeEdit->setDisplayFormat(QCoreApplication::translate("EventDialog", "yyyy- MM -dd HH:mm", nullptr));
-        lblHint->setText(QCoreApplication::translate("EventDialog", "TextLabel", nullptr));
+        lblHint->setText(QString());
     } // retranslateUi
 
 };

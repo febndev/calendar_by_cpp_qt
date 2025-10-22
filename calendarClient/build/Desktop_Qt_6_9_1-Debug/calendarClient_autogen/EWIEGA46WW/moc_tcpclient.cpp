@@ -60,10 +60,10 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         "counts",
         "addCalSuccess",
         "addCalFailed",
-        "calendarListUpdated",
+        "calendarTotalListUpdated",
         "QList<CalendarInfo>",
         "calList",
-        "calendarNameListUpdated",
+        "calendarListUpdated",
         "calNameList",
         "inviteCalSuccess",
         "inviteCalFailed",
@@ -75,8 +75,7 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         "slot_displayError",
         "QAbstractSocket::SocketError",
         "socketError",
-        "slot_readSocket",
-        "slot_calLstReadyRead"
+        "slot_readSocket"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -114,11 +113,11 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         QtMocHelpers::SignalData<void(const QString &)>(20, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QString, 6 },
         }}),
-        // Signal 'calendarListUpdated'
+        // Signal 'calendarTotalListUpdated'
         QtMocHelpers::SignalData<void(const QList<CalendarInfo>)>(21, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 22, 23 },
         }}),
-        // Signal 'calendarNameListUpdated'
+        // Signal 'calendarListUpdated'
         QtMocHelpers::SignalData<void(const QStringList)>(24, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::QStringList, 25 },
         }}),
@@ -142,8 +141,6 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         }}),
         // Slot 'slot_readSocket'
         QtMocHelpers::SlotData<void()>(36, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'slot_calLstReadyRead'
-        QtMocHelpers::SlotData<void()>(37, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -178,8 +175,8 @@ void TcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 8: _t->monthCountsReceived((*reinterpret_cast< std::add_pointer_t<quint32>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QDate>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QDate>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<QMap<QDate,int>>>(_a[4]))); break;
         case 9: _t->addCalSuccess(); break;
         case 10: _t->addCalFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
-        case 11: _t->calendarListUpdated((*reinterpret_cast< std::add_pointer_t<QList<CalendarInfo>>>(_a[1]))); break;
-        case 12: _t->calendarNameListUpdated((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
+        case 11: _t->calendarTotalListUpdated((*reinterpret_cast< std::add_pointer_t<QList<CalendarInfo>>>(_a[1]))); break;
+        case 12: _t->calendarListUpdated((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
         case 13: _t->inviteCalSuccess(); break;
         case 14: _t->inviteCalFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 15: _t->calendarListDirty(); break;
@@ -187,13 +184,19 @@ void TcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 17: _t->slot_discardSocket(); break;
         case 18: _t->slot_displayError((*reinterpret_cast< std::add_pointer_t<QAbstractSocket::SocketError>>(_a[1]))); break;
         case 19: _t->slot_readSocket(); break;
-        case 20: _t->slot_calLstReadyRead(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 11:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QList<CalendarInfo> >(); break;
+            }
+            break;
         case 18:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
@@ -226,9 +229,9 @@ void TcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             return;
         if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QString & )>(_a, &TcpClient::addCalFailed, 10))
             return;
-        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QList<CalendarInfo> )>(_a, &TcpClient::calendarListUpdated, 11))
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QList<CalendarInfo> )>(_a, &TcpClient::calendarTotalListUpdated, 11))
             return;
-        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QStringList )>(_a, &TcpClient::calendarNameListUpdated, 12))
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QStringList )>(_a, &TcpClient::calendarListUpdated, 12))
             return;
         if (QtMocHelpers::indexOfMethod<void (TcpClient::*)()>(_a, &TcpClient::inviteCalSuccess, 13))
             return;
@@ -260,14 +263,14 @@ int TcpClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 21)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 21;
+        _id -= 20;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 21)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 21;
+        _id -= 20;
     }
     return _id;
 }
@@ -339,13 +342,13 @@ void TcpClient::addCalFailed(const QString & _t1)
 }
 
 // SIGNAL 11
-void TcpClient::calendarListUpdated(const QList<CalendarInfo> _t1)
+void TcpClient::calendarTotalListUpdated(const QList<CalendarInfo> _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 11, nullptr, _t1);
 }
 
 // SIGNAL 12
-void TcpClient::calendarNameListUpdated(const QStringList _t1)
+void TcpClient::calendarListUpdated(const QStringList _t1)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 12, nullptr, _t1);
 }

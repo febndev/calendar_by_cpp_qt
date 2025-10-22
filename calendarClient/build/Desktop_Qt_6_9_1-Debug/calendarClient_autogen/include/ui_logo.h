@@ -22,7 +22,7 @@ class Ui_Logo
 {
 public:
     QLabel *logoLabel;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QLabel *titleLabel;
     QPushButton *startButton;
@@ -34,14 +34,14 @@ public:
         Logo->resize(1200, 800);
         logoLabel = new QLabel(Logo);
         logoLabel->setObjectName("logoLabel");
-        logoLabel->setGeometry(QRect(160, 140, 66, 18));
-        widget = new QWidget(Logo);
-        widget->setObjectName("widget");
-        widget->setGeometry(QRect(390, 480, 140, 78));
-        verticalLayout = new QVBoxLayout(widget);
+        logoLabel->setGeometry(QRect(320, 140, 66, 18));
+        layoutWidget = new QWidget(Logo);
+        layoutWidget->setObjectName("layoutWidget");
+        layoutWidget->setGeometry(QRect(560, 660, 140, 78));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        titleLabel = new QLabel(widget);
+        titleLabel = new QLabel(layoutWidget);
         titleLabel->setObjectName("titleLabel");
         QFont font;
         font.setPointSize(20);
@@ -51,7 +51,7 @@ public:
 
         verticalLayout->addWidget(titleLabel);
 
-        startButton = new QPushButton(widget);
+        startButton = new QPushButton(layoutWidget);
         startButton->setObjectName("startButton");
 
         verticalLayout->addWidget(startButton);

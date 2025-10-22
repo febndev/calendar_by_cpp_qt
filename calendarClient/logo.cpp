@@ -13,7 +13,7 @@ Logo::Logo(QWidget *parent)
     // 로고 이미지 출력
     QPixmap logopix = QPixmap(":/resources/calendar-icons.png");
     ui->logoLabel->setPixmap(logopix);
-    ui->logoLabel->setGeometry(200, 70, 1000, 600);
+    ui->logoLabel->setGeometry(380, 30, 1000, 600);
 }
 
 Logo::~Logo()

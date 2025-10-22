@@ -184,14 +184,17 @@ void MainWindow::setTcpClient(TcpClient* t)
     // ⬆️ 여기까지 추가
 
     // TcpClient가 목록을 가져오면 좌측 Dock모델 경신
-    connect(tcp, &TcpClient::calendarNameListUpdated,
+    connect(tcp, &TcpClient::calendarTotalListUpdated,
             this, &MainWindow::loadCalendars,
             Qt::UniqueConnection);
+    qDebug() << "[MainWindow] startup list size =" << tcp->calTotalList().size();
 
     // 앱 시작 시 이미 보유한 목록이 있으면 즉시 반영
-    if (!tcp->calNameList().isEmpty())
-        loadCalendars(tcp->calNameList());
+    if (!tcp->calTotalList().isEmpty())
+        loadCalendars(tcp->calTotalList());
     // 이거 다른 식으로 쓸 수 있는지 알아볼것.
+
+
 }
 
 // 달력 보여주기 함수
@@ -274,7 +277,8 @@ void MainWindow::setupDocks()
     }
 
     // 체크 변경 감지: 모델의 itemChanged 신호 사용
-    connect(m_calModel, &QStandardItemModel::itemChanged, this, [this](QStandardItem*){
+    connect(m_calModel, &QStandardItemModel::itemChanged,
+            this, [this](QStandardItem*){
         applyCalendarFilter();
     });
     // 좌Dock 중복으로 실행돼서 주석 처리
@@ -482,34 +486,22 @@ void MainWindow::setupCalendarTreeModel()
     m_calTree->setColumnHidden(COL_ID, true);
 }
 
-// // 0820 이거 폐기해도 되고 밑의 loadCalendars 를 수정해서 사용하는게 좋음.
-// void MainWindow::loadCalendarsFromQStringList(const QStringList& names)
-// {
-//     // 필요 시 서버가 색/권한을 같이 보내주도록 확장하면 됨.
-//     QList<CalendarInfo> list;
-//     // 임시: 모두 표시(true), 기본색 회색.
-//     for (const auto& name : names) {
-//         CalendarInfo ci;
-//         ci.id      = name;         // 일단 id=이름으로
-//         ci.name    = name;
-//         ci.color   = QColor(120,120,120);
-//         ci.role    = "viewer";
-//         ci.visible = true;
-//         list.push_back(ci);
-//     }
-//     loadCalendars(list);
-// }
-
 // 서버에서 캘린더 목록 받아왔을 때 이 함수에 그대로 넣어주면 된다.
 // QList<CalendarInfo> List 만들어서 loadCalendars(list);
 void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
-{   // 리프레시 모델
+{
+    // 디버깅용 코드
+    qDebug() << "[MainWindow] loadCalendars called. count =" << list.size();
+    if (!list.isEmpty())
+        qDebug() << " first =" << list.front().id << list.front().name;
+    // 리프레시 모델
     m_calModel->removeRows(0, m_calModel->rowCount());
 
     // 오른쪽 공유 콤보박스에 넣을 이름들 미리 수집
     QStringList calNames;
     calNames.reserve(list.size());
 
+    // ui세팅
     for (const auto& cal : list)
     {
         // 0: Name(+체크박스 + 색상 아이콘)
@@ -522,7 +514,7 @@ void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
         // 사용자 데이터로 숨김 정보 저장 (행의 대표 아이템에 몰아넣음)
         nameItem->setData(cal.id,    ROLE_CAL_ID);
         nameItem->setData(cal.color, ROLE_CAL_COLOR);
-        //namellItem->setData(cal.role,  ROLE_CAL_ROLE);
+        nameItem->setData(cal.role,  ROLE_CAL_ROLE);
 
         // 1: Role
         auto* roleItem = new QStandardItem(cal.role);
@@ -540,7 +532,7 @@ void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
         calNames << cal.name;
     }
 
-    // [오른쪽 공유 콤보 갱신]
+    // 오른쪽 공유 콤보박스 갱신
     if (m_cmbCalendars) {
         const QSignalBlocker blocker(m_cmbCalendars); // 시그널 일시 차단
         m_cmbCalendars->clear();
@@ -556,21 +548,35 @@ void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
 // 0819 [우Dock] 버튼 클릭시 실행되는 slots 추가
 void MainWindow::openAddEventDialog()
 {
+    qDebug() << "[openAddEventDialog] ENTER";
+    const int calId = currentSelectedCalId();
     // “일정 추가” 다이얼로그 열기 (선택한 날짜/캘린더 등은 이후 개선)
     EventDialog dlg(this);
+    dlg.setCalendarId(calId); // ← 세터로 주입
 
     // TcpClient의 목록 업데이트 시그널을 다이얼로그 슬롯으로 연결
     bool ok = connect(tcp, &TcpClient::calendarListUpdated,
-            &dlg, &EventDialog::setCalendars);
+                      &dlg, &EventDialog::setCalendars);
     qDebug() << "connect(TcpClient->EventDialog) ="<<ok << "tcp = "<<tcp << "dlg: "<<&dlg;
 
     // 진단용: MainWindow에서도 신호를 받아보자
     connect(tcp, &TcpClient::calendarListUpdated, this, [](const QStringList& ls){
         qDebug() << "[MW] got calendarListUpdated:" << ls;
     });
+
     // 이미 받아둔 목록이 있으면 즉시 반영(emit 선행 대비)
-    if (!tcp->calendars().isEmpty())
-        dlg.setCalendars(tcp->calendars());
+    if (!tcp->calNameList().isEmpty()) {
+        qDebug() << "[openAddEventDialog] priming from cache";
+        dlg.setCalendars(tcp->calNameList());
+    } else {
+        qDebug() << "[openAddEventDialog] cache empty -> requesting list";
+        qDebug() << "[openAddEventDialog] BEFORE sendCalendarListRequest";
+
+        tcp->sendCalendarListRequest();  // 🔴 목록 재요청 API가 있다면 꼭 호출
+        qDebug() << "[openAddEventDialog] AFTER sendCalendarListRequest";
+
+    }
+    dlg.setCalendars(tcp->calNameList());
 
     dlg.exec();
     // TODO: dlg.setDefaultDate(selectedDate);  // 달력 선택과 연동하면 베스트
@@ -669,20 +675,3 @@ int MainWindow::currentSelectedCalId() const
     // COL_NAME, ROLE_CAL_ID 대신에 실제 DB의 정수 캘린더 ID 여야 함.
 }
 
-
-
-
-// 0819 오후에 쓴 코드 캘린더 만든 결과를 받는 거
-// TcpClient 응답을 UI에 연결 (예: 생성 성공)
-// void MainWindow::wireCalendarSignals() {
-//     connect(tcp, &TcpClient::calendarCreated, this, [this](int id, const QString& name, bool isPublic){
-//         // 모델에 추가하거나, 목록 새로고침 로직
-//         // e.g., model->append({id, name, /*owner*/0, isPublic, QDateTime::currentDateTime()});
-//         // 또는 서버에서 전체 목록 재요청
-//         // refreshCalendars();
-//     });
-
-//     connect(tcp, &TcpClient::calendarCreateFailed, this, [this](const QString& reason){
-//         // QMessageBox::warning(this, "캘린더 생성 실패", reason);
-//     });
-// }

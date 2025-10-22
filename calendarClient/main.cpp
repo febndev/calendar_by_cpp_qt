@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "tcpclient.h"
 #include "logindialog.h"
+#include "calendarinfo.h"
 
 #include <QApplication>
 
