@@ -38,10 +38,24 @@ template <> constexpr inline auto AddCalendarDialog::qt_create_metaobjectdata<qt
 {
     namespace QMC = QtMocConstants;
     QtMocHelpers::StringRefStorage qt_stringData {
-        "AddCalendarDialog"
+        "AddCalendarDialog",
+        "addCalRequested",
+        "",
+        "name",
+        "is_Public",
+        "onCreateButtonClicked",
+        "onCancelButtonClicked"
     };
 
     QtMocHelpers::UintData qt_methods {
+        // Signal 'addCalRequested'
+        QtMocHelpers::SignalData<void(const QString &, int)>(1, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 3 }, { QMetaType::Int, 4 },
+        }}),
+        // Slot 'onCreateButtonClicked'
+        QtMocHelpers::SlotData<void()>(5, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onCancelButtonClicked'
+        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -63,10 +77,18 @@ Q_CONSTINIT const QMetaObject AddCalendarDialog::staticMetaObject = { {
 void AddCalendarDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     auto *_t = static_cast<AddCalendarDialog *>(_o);
-    (void)_t;
-    (void)_c;
-    (void)_id;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        switch (_id) {
+        case 0: _t->addCalRequested((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 1: _t->onCreateButtonClicked(); break;
+        case 2: _t->onCancelButtonClicked(); break;
+        default: ;
+        }
+    }
+    if (_c == QMetaObject::IndexOfMethod) {
+        if (QtMocHelpers::indexOfMethod<void (AddCalendarDialog::*)(const QString & , int )>(_a, &AddCalendarDialog::addCalRequested, 0))
+            return;
+    }
 }
 
 const QMetaObject *AddCalendarDialog::metaObject() const
@@ -85,6 +107,24 @@ void *AddCalendarDialog::qt_metacast(const char *_clname)
 int AddCalendarDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 3)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 3;
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 3)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 3;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void AddCalendarDialog::addCalRequested(const QString & _t1, int _t2)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 0, nullptr, _t1, _t2);
 }
 QT_WARNING_POP

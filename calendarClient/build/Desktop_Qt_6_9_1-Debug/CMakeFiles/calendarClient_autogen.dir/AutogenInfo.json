@@ -727,6 +727,12 @@
 			null
 		],
 		[
+			"/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendarClient/calendarinfo.h",
+			"MU",
+			"EWIEGA46WW/moc_calendarinfo.cpp",
+			null
+		],
+		[
 			"/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendarClient/calendarwidget.h",
 			"MU",
 			"EWIEGA46WW/moc_calendarwidget.cpp",

@@ -2,6 +2,10 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDate \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDebug \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QFile \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonArray \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonDocument \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonParseError \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMap \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMetaType \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QObject \
@@ -31,6 +35,8 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearraylist.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearrayview.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcalendar.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborcommon.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborvalue.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qchar.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare_impl.h \
@@ -68,6 +74,11 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qitemselectionmodel.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterable.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterator.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonarray.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsondocument.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonobject.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonparseerror.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonvalue.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlatin1stringview.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qline.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlist.h \
@@ -143,11 +154,13 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtypes.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qurl.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qutf8stringview.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/quuid.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvariant.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvarlengtharray.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qversiontagging.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qxptype_traits.h \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qyieldcpu.h \
+	/home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QColor \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QPixmap \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QTextCharFormat \
 	/home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qaction.h \
@@ -619,6 +632,7 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/Qt/Tools/CMake/share/cmake-3.30/Modules/Platform/Linux.cmake \
 	/home/aiot101/Qt/Tools/CMake/share/cmake-3.30/Modules/Platform/UnixPaths.cmake \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/CMakeLists.txt \
+	/home/aiot101/바탕화면/calendarApp/calendarClient/EventDto.h \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/addcalendardialog.cpp \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/addcalendardialog.h \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/.qtc/package-manager/auto-setup.cmake \
@@ -626,6 +640,7 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/moc_predefs.h \
+	/home/aiot101/바탕화면/calendarApp/calendarClient/calendarinfo.h \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/calendarwidget.cpp \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/calendarwidget.h \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/eventdialog.cpp \
@@ -637,6 +652,7 @@ calendarClient_autogen/timestamp: \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/main.cpp \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/mainwindow.cpp \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/mainwindow.h \
+	/home/aiot101/바탕화면/calendarApp/calendarClient/protocol.h \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/resources.qrc \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/signupdialog.cpp \
 	/home/aiot101/바탕화면/calendarApp/calendarClient/signupdialog.h \

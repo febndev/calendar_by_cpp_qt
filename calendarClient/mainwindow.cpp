@@ -28,6 +28,8 @@
 #include <QPainter>
 #include <QSignalBlocker>
 // 0819 끝
+#include <QComboBox>
+
 // 0819 [Dock - 정수 상수] COL 은 QStandardItemModel 열인덱스 ROLE 은 데이터 저장/조회 할때 역할 키
 namespace {
 static constexpr int COL_NAME  = 0;
@@ -156,6 +158,40 @@ void MainWindow::setTcpClient(TcpClient* t)
         connect(tcp, &TcpClient::loginFailed,
                 this, &MainWindow::onLoginFailed, Qt::UniqueConnection);
     }
+    // 알림메시지 보내는 코드들
+    // // ⬇️ 여기부터 추가
+    // connect(tcp, &TcpClient::inviteCalSuccess, this, [this](){
+    //     QMessageBox::information(this, tr("공유"), tr("초대가 완료되었습니다."));
+    //     // 필요하면 목록 재요청: tcp->requestCalendarList();
+    // }, Qt::UniqueConnection);
+
+    // connect(tcp, &TcpClient::inviteCalFailed, this, [this](const QString& reason){
+    //     QString msg = tr("초대에 실패했습니다.");
+    //     if (!reason.isEmpty()) msg += "\n(" + reason + ")";
+    //     QMessageBox::warning(this, tr("공유 실패"), msg);
+    // }, Qt::UniqueConnection);
+
+    // connect(tcp, &TcpClient::calendarListDirty, this, [this](){
+    //     // 서버가 사용자2에게 보내는 푸시를 우리 클라에서도 재사용할 수 있음
+    //     tcp->requestCalendarList();});
+
+    // connect(tcp, &TcpClient::eventsDirty, this, [this](int calId){
+    //     // 현재 달 범위 재요청 (네가 가진 헬퍼 있으면 사용)
+    //     const QDate first = QDate::currentDate().addDays(1 - QDate::currentDate().day());
+    //     const QDate last  = first.addMonths(1).addDays(-1);
+    //     tcp->requestEvents(calId, first, last);
+    // }, Qt::UniqueConnection);
+    // ⬆️ 여기까지 추가
+
+    // TcpClient가 목록을 가져오면 좌측 Dock모델 경신
+    connect(tcp, &TcpClient::calendarNameListUpdated,
+            this, &MainWindow::loadCalendars,
+            Qt::UniqueConnection);
+
+    // 앱 시작 시 이미 보유한 목록이 있으면 즉시 반영
+    if (!tcp->calNameList().isEmpty())
+        loadCalendars(tcp->calNameList());
+    // 이거 다른 식으로 쓸 수 있는지 알아볼것.
 }
 
 // 달력 보여주기 함수
@@ -229,12 +265,12 @@ void MainWindow::setupDocks()
         setupCalendarTreeModel(); // 헤더/컬럼 구성
 
         // (예시) 서버/DB에서 받아왔다고 가정한 목록
-        QList<CalendarInfo> sample = {
-            { "cal_personal", "Personal", QColor(60,179,113), "owner",  true  },
-            { "cal_team_a",   "Team A",   QColor(65,105,225),  "editor", true  },
-            { "cal_proj_x",   "Project X",QColor(220, 20, 60), "viewer", false }
-        };
-        loadCalendars(sample);
+        // QList<CalendarInfo> sample = {
+        //     { "cal_personal", "Personal", QColor(60,179,113), "owner",  true  },
+        //     { "cal_team_a",   "Team A",   QColor(65,105,225),  "editor", true  },
+        //     { "cal_proj_x",   "Project X",QColor(220, 20, 60), "viewer", false }
+        // };
+        // loadCalendars(sample);
     }
 
     // 체크 변경 감지: 모델의 itemChanged 신호 사용
@@ -264,7 +300,7 @@ void MainWindow::setupDocks()
     vbox->setSpacing(8);
 
     // 1) 초대 라벨 + LineEdit
-    auto *lbl = new QLabel(tr("캘린더 공유할 ID(또는 이메일)"), panel);
+    auto *lbl = new QLabel(tr("캘린더 공유할 ID"), panel);
     if (!m_inviteEdit) {
         m_inviteEdit = new QLineEdit(panel);
         m_inviteEdit->setObjectName("inviteLineEdit");
@@ -274,12 +310,26 @@ void MainWindow::setupDocks()
         m_inviteEdit->setParent(panel); // 부모 재지정
     }
 
-    // 2) 버튼 3개(중복 생성 방지)
+    // 2) 공유할 캘린더 선택 라벨 + ComboBox
+    auto *lblCal = new QLabel(tr("공유할 캘린더 선택"), panel);
+    if (!m_cmbCalendars) {
+        m_cmbCalendars = new QComboBox(panel);
+        m_cmbCalendars->setObjectName("cmbCalendars");
+        // 👉 여기서 캘린더 목록 채우기
+        // 예시: 서버에서 받아온 QStringList calendars 사용
+        // m_cmbCalendars->addItems(calendars);
+    } else {
+        m_cmbCalendars->setParent(panel);
+    }
+    vbox->addWidget(lblCal);
+    vbox->addWidget(m_cmbCalendars);
+
+    // 3) 버튼 3개(중복 생성 방지)
     if (!m_btnAddEvent) {
         m_btnAddEvent = new QPushButton(tr("일정 추가"), panel);
         m_btnAddEvent->setObjectName("btnAddEvent");
         connect(m_btnAddEvent, &QPushButton::clicked,
-                this, &MainWindow::onClickAddEvent, Qt::UniqueConnection);
+                this, &MainWindow::openAddEventDialog, Qt::UniqueConnection);
     } else {
         m_btnAddEvent->setParent(panel);
     }
@@ -288,7 +338,7 @@ void MainWindow::setupDocks()
         m_btnAddCalendar = new QPushButton(tr("캘린더 추가"), panel);
         m_btnAddCalendar->setObjectName("btnAddCalendar");
         connect(m_btnAddCalendar, &QPushButton::clicked,
-                this, &MainWindow::onClickAddCalendar, Qt::UniqueConnection);
+                this, &MainWindow::openAddCalDialog, Qt::UniqueConnection);
     } else {
         m_btnAddCalendar->setParent(panel);
     }
@@ -305,10 +355,13 @@ void MainWindow::setupDocks()
     // 배치
     vbox->addWidget(lbl);
     vbox->addWidget(m_inviteEdit);
-    vbox->addSpacing(4);
+    vbox->addSpacing(6);
+    vbox->addWidget(lblCal);
+    vbox->addWidget(m_cmbCalendars);
+    vbox->addSpacing(6);
+    vbox->addWidget(m_btnShare);
     vbox->addWidget(m_btnAddEvent);
     vbox->addWidget(m_btnAddCalendar);
-    vbox->addWidget(m_btnShare);
     vbox->addStretch();
 
     // Dock에 패널 장착 (이전 위젯 정리)
@@ -358,23 +411,6 @@ void MainWindow::setupDocks()
     // 기본 가시성 확보(복원 상태가 없거나 잘못 저장된 경우 대비)
     m_calDock->show();
     m_rightDock->show();
-
-    /* 0819 한번 주석처리 해보자..
-    // Dock에 패널 장착 (이전 QTextEdit 교체)
-    QWidget *old = m_rightDock->widget();
-    m_rightDock->setWidget(panel);
-    if (old) old->deleteLater();   // 기존 QTextEdit 메모리 정리
-
-    // 시그널 연결
-    connect(m_btnAddEvent,     &QPushButton::clicked, this, &MainWindow::onClickAddEvent);
-    connect(m_btnAddCalendar,  &QPushButton::clicked, this, &MainWindow::onClickAddCalendar);
-    connect(m_btnShare,        &QPushButton::clicked, this, &MainWindow::onClickShare);
-
-    // 상단 메뉴 → View에 토글 추가(사용자가 껐다 켤 수 있게)
-    QMenu* viewMenu = menuBar()->addMenu(tr("View"));
-    viewMenu->addAction(m_calDock->toggleViewAction());
-    viewMenu->addAction(m_rightDock->toggleViewAction());
-    */
 }
 
 void MainWindow::restoreUiState()
@@ -445,11 +481,34 @@ void MainWindow::setupCalendarTreeModel()
     // ID 컬럼은 사용자에게 안 보여줘도 되면 숨김
     m_calTree->setColumnHidden(COL_ID, true);
 }
+
+// // 0820 이거 폐기해도 되고 밑의 loadCalendars 를 수정해서 사용하는게 좋음.
+// void MainWindow::loadCalendarsFromQStringList(const QStringList& names)
+// {
+//     // 필요 시 서버가 색/권한을 같이 보내주도록 확장하면 됨.
+//     QList<CalendarInfo> list;
+//     // 임시: 모두 표시(true), 기본색 회색.
+//     for (const auto& name : names) {
+//         CalendarInfo ci;
+//         ci.id      = name;         // 일단 id=이름으로
+//         ci.name    = name;
+//         ci.color   = QColor(120,120,120);
+//         ci.role    = "viewer";
+//         ci.visible = true;
+//         list.push_back(ci);
+//     }
+//     loadCalendars(list);
+// }
+
 // 서버에서 캘린더 목록 받아왔을 때 이 함수에 그대로 넣어주면 된다.
 // QList<CalendarInfo> List 만들어서 loadCalendars(list);
 void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
-{
+{   // 리프레시 모델
     m_calModel->removeRows(0, m_calModel->rowCount());
+
+    // 오른쪽 공유 콤보박스에 넣을 이름들 미리 수집
+    QStringList calNames;
+    calNames.reserve(list.size());
 
     for (const auto& cal : list)
     {
@@ -457,69 +516,173 @@ void MainWindow::loadCalendars(const QList<CalendarInfo>& list)
         auto* nameItem = new QStandardItem(cal.name);
         nameItem->setEditable(false);
         nameItem->setCheckable(true);
-        nameItem->setCheckState(cal.enabled ? Qt::Checked : Qt::Unchecked);
+        nameItem->setCheckState(cal.can_Edit ? Qt::Checked : Qt::Unchecked);
         nameItem->setIcon(makeColorDot(cal.color));
+
         // 사용자 데이터로 숨김 정보 저장 (행의 대표 아이템에 몰아넣음)
         nameItem->setData(cal.id,    ROLE_CAL_ID);
         nameItem->setData(cal.color, ROLE_CAL_COLOR);
-        nameItem->setData(cal.role,  ROLE_CAL_ROLE);
+        //namellItem->setData(cal.role,  ROLE_CAL_ROLE);
 
         // 1: Role
         auto* roleItem = new QStandardItem(cal.role);
         roleItem->setEditable(false);
 
         // 2: ID (숨김 예정)
-        auto* idItem = new QStandardItem(cal.id);
+        auto* idItem = new QStandardItem(QString::number(cal.id));
         idItem->setEditable(false);
 
         // 한 행으로 추가
         QList<QStandardItem*> row { nameItem, roleItem, idItem };
         m_calModel->appendRow(row);
+
+        // 콤보용 이름 수집
+        calNames << cal.name;
+    }
+
+    // [오른쪽 공유 콤보 갱신]
+    if (m_cmbCalendars) {
+        const QSignalBlocker blocker(m_cmbCalendars); // 시그널 일시 차단
+        m_cmbCalendars->clear();
+        m_cmbCalendars->addItems(calNames);
+        // 필요하면 기본 선택 인덱스 지정
+        if (!calNames.isEmpty()){
+            m_cmbCalendars->setCurrentIndex(0);
+        }
     }
 }
 
+
 // 0819 [우Dock] 버튼 클릭시 실행되는 slots 추가
-void MainWindow::onClickAddEvent()
+void MainWindow::openAddEventDialog()
 {
     // “일정 추가” 다이얼로그 열기 (선택한 날짜/캘린더 등은 이후 개선)
     EventDialog dlg(this);
+
+    // TcpClient의 목록 업데이트 시그널을 다이얼로그 슬롯으로 연결
+    bool ok = connect(tcp, &TcpClient::calendarListUpdated,
+            &dlg, &EventDialog::setCalendars);
+    qDebug() << "connect(TcpClient->EventDialog) ="<<ok << "tcp = "<<tcp << "dlg: "<<&dlg;
+
+    // 진단용: MainWindow에서도 신호를 받아보자
+    connect(tcp, &TcpClient::calendarListUpdated, this, [](const QStringList& ls){
+        qDebug() << "[MW] got calendarListUpdated:" << ls;
+    });
+    // 이미 받아둔 목록이 있으면 즉시 반영(emit 선행 대비)
+    if (!tcp->calendars().isEmpty())
+        dlg.setCalendars(tcp->calendars());
+
+    dlg.exec();
     // TODO: dlg.setDefaultDate(selectedDate);  // 달력 선택과 연동하면 베스트
-    if (dlg.exec() == QDialog::Accepted) {
-        // 다이얼로그에서 입력받은 정보를 서버로 등록 요청
-        // 예) m_tcp->requestAddEvent(dlg.toEventPayload());
-        //     repaint/refresh (월별 카운트, 일정 목록 갱신)
-    }
+    // if (dlg.exec() == QDialog::Accepted) {
+    //     // 다이얼로그에서 입력받은 정보를 서버로 등록 요청
+    //     // 예) m_tcp->requestAddEvent(dlg.toEventPayload());
+    //     //     repaint/refresh (월별 카운트, 일정 목록 갱신)
+    // }
 }
 
-void MainWindow::onClickAddCalendar()
+void MainWindow::openAddCalDialog()
 {
     AddCalendarDialog dlg(this);
-    if (dlg.exec() == QDialog::Accepted) {
-        // 예) m_tcp->requestAddCalendar(dlg.calendarName(), dlg.color());
-        //     캘린더 목록/토글 UI 갱신 (우리가 정의한 Menu2 영역)
-    }
+    // 1) 다이얼로그 → TcpClient 요청 연결
+    connect(&dlg, &AddCalendarDialog::addCalRequested,
+            tcp,  &TcpClient::sendAddCalRequest, Qt::UniqueConnection);
+
+    // 2) 서버 응답 처리: TcpClient → (여기서 다이얼로그 제어)
+    connect(tcp, &TcpClient::addCalSuccess, &dlg, [&](){
+        QMessageBox::information(&dlg,"캘린더 추가 성공", "캘린더가 추가 되었습니다.");
+        dlg.accept();
+
+        // tcp->requestCalendarList();
+    });
+
+    connect(tcp, &TcpClient::addCalFailed, &dlg, [&](const QString& reason){
+        QMessageBox::warning(&dlg, "캘린더 추가 실패",
+                             reason.isEmpty() ? "캘린더 추가에 실패했습니다." : reason);
+    });
+    dlg.exec();
+
+    // // TcpClient가 목록을 받아왔을 때 MainWindow로 전달
+    // connect(tcp, &TcpClient::calendarListUpdated,
+    //         this, &MainWindow::loadCalendars);
 }
 
 void MainWindow::onClickShare()
 {
     const QString invitee = m_inviteEdit ? m_inviteEdit->text().trimmed() : QString();
     if (invitee.isEmpty()) {
-        QMessageBox::warning(this, tr("공유하기"), tr("초대할 ID 또는 이메일을 입력하세요."));
+        QMessageBox::warning(this, tr("공유하기"), tr("초대할 ID를 입력하세요."));
         return;
     }
-    if (!tcp) {
-        QMessageBox::critical(this, tr("공유하기"), tr("네트워크 연결이 없습니다."));
+    if (!m_cmbCalendars || m_cmbCalendars->currentIndex() < 0) {
+        QMessageBox::warning(this, tr("공유"), tr("공유할 캘린더를 선택하세요."));
         return;
     }
 
-    // 서버로 “캘린더 공유” 요청 전송
-    // ---- 패킷 예시 (우리 프로젝트 프로토콜에 맞게 구현) ----
-    // m_tcp->requestShareCalendar(/*calendarId*/ currentCalendarId, invitee);
+    // 콤보 내부 데이터(UserRole)에서 calId 꺼내기
+    // 저장 타입이 int 라면:
+    bool ok = false;
+    int calId = m_cmbCalendars->currentData().toInt(&ok);
+    if (!ok) {
+        // 저장을 QString id로 했거나 변환 실패한 경우도 처리
+        const QVariant v = m_cmbCalendars->currentData();
+        if (v.canConvert<QString>()) {
+            bool ok2 = false;
+            calId = v.toString().toInt(&ok2);
+            if (!ok2) {
+                QMessageBox::warning(this, tr("공유"), tr("선택한 캘린더 ID를 확인할 수 없습니다."));
+                return;
+            }
+        } else {
+            QMessageBox::warning(this, tr("공유"), tr("선택한 캘린더 ID를 확인할 수 없습니다."));
+            return;
+        }
+    }
 
-    // 우선은 스텁 호출 형태로 남겨둘게:
-    // TODO: 구현 후 성공/실패 시 서버 응답 받아서 메시지 표시
-    //       ex) statusBar()->showMessage("공유 요청을 보냈습니다.", 3000);
-
-    QMessageBox::information(this, tr("공유하기"),
-                             tr("'%1'에게 공유 요청을 전송했습니다(가정).").arg(invitee));
+    if (tcp) {
+        tcp->sendInviteRequest(invitee, calId);
+    } else {
+        QMessageBox::warning(this, tr("공유"), tr("네트워크 연결이 준비되지 않았습니다."));
+    }
 }
+
+void MainWindow::refreshCalendars()
+{
+    if (!m_calModel) return;
+    QSignalBlocker blocker(m_calModel);   // 로딩 중 itemChanged 폭주 방지
+    setupCalendarTreeModel();             // 헤더/컬럼 재설정(필요 시)
+    loadCalendars(m_calCache);            // ✅ 캐시로 다시 그리기
+}
+
+int MainWindow::currentSelectedCalId() const
+{
+    if (!m_calTree || !m_calModel) return -1;
+    const QModelIndex idx = m_calTree->currentIndex();
+    if (!idx.isValid()) return -1;
+
+    // 우리는 캘린더 id를 "행 대표 아이템(=이름 컬럼)"의 사용자 데이터에 넣었음
+    const QStandardItem* nameItem = m_calModel->item(idx.row(), COL_NAME);
+    if (!nameItem) return -1;
+
+    // ROLE_CAL_ID에 int를 저장했다면 toInt(), QString이면 toString()→toInt()
+    return nameItem->data(ROLE_CAL_ID).toInt();
+    // COL_NAME, ROLE_CAL_ID 대신에 실제 DB의 정수 캘린더 ID 여야 함.
+}
+
+
+
+
+// 0819 오후에 쓴 코드 캘린더 만든 결과를 받는 거
+// TcpClient 응답을 UI에 연결 (예: 생성 성공)
+// void MainWindow::wireCalendarSignals() {
+//     connect(tcp, &TcpClient::calendarCreated, this, [this](int id, const QString& name, bool isPublic){
+//         // 모델에 추가하거나, 목록 새로고침 로직
+//         // e.g., model->append({id, name, /*owner*/0, isPublic, QDateTime::currentDateTime()});
+//         // 또는 서버에서 전체 목록 재요청
+//         // refreshCalendars();
+//     });
+
+//     connect(tcp, &TcpClient::calendarCreateFailed, this, [this](const QString& reason){
+//         // QMessageBox::warning(this, "캘린더 생성 실패", reason);
+//     });
+// }

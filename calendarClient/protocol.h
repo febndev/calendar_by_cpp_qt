@@ -24,20 +24,20 @@ enum class OpCode : quint16 {
 };
 
 // 참고용 구조체 (직렬화는 PacketBuilder/Parser에서 수행)
-struct AddEventReq {
-    qint32  calendarId;
-    QString title;
-    QString memo;
-    qint64  startEpochSec; // UTC epoch seconds
-    qint64  endEpochSec;   // UTC epoch seconds
-    qint32  createdBy;
-};
+// struct AddEventReq {
+//     qint32  calendarId;
+//     QString title;
+//     QString memo;
+//     qint64  startEpochSec; // UTC epoch seconds
+//     qint64  endEpochSec;   // UTC epoch seconds
+//     qint32  createdBy;
+// };
 
-struct AddEventAck {
-    qint32  result;    // 0=OK, else=error code
-    qint32  eventId;   // PK of events.id (성공 시)
-    QString message;   // 오류 상세(선택)
-};
+// struct AddEventAck {
+//     qint32  result;    // 0=OK, else=error code
+//     qint32  eventId;   // PK of events.id (성공 시)
+//     QString message;   // 오류 상세(선택)
+// };
 
 
 #endif // PROTOCOL_H

@@ -7,8 +7,11 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    // 0820 [MetaType] 런타임 등록
+    qRegisterMetaType<CalendarInfo>("CalendarInfo");
+    qRegisterMetaType<QList<CalendarInfo>>("QList<CalendarInfo>");
 
-    //0818 [Dock Widget 관련] QSettings 기본 키 공간 지정 (회사/ 앱명은 프로젝트에 맞춰 수정)
+    // 0818 [Dock Widget 관련] QSettings 기본 키 공간 지정 (회사/ 앱명은 프로젝트에 맞춰 수정)
     QCoreApplication::setOrganizationName("MyCompany");
     QCoreApplication::setApplicationName("CalendarApp");
 

@@ -1,5 +1,7 @@
 /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/aiot101/바탕화면/calendarApp/calendarClient/mainwindow.h \
   /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/moc_predefs.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QString \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q17memory.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20functional.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20iterator.h \
@@ -23,6 +25,8 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearraylist.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearrayview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcalendar.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborcommon.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcborvalue.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qchar.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare_impl.h \
@@ -55,6 +59,10 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qitemselectionmodel.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterable.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qiterator.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsondocument.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonobject.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonparseerror.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qjsonvalue.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlatin1stringview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qline.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlist.h \
@@ -128,11 +136,13 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtypes.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qurl.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qutf8stringview.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/quuid.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvariant.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvarlengtharray.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qversiontagging.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qxptype_traits.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qyieldcpu.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QColor \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QPixmap \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qaction.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qbitmap.h \
@@ -206,6 +216,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qwidget.h \
+  /home/aiot101/바탕화면/calendarApp/calendarClient/calendarinfo.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

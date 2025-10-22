@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 // 로고 및 앱 초기진입 창
+#include "calendarinfo.h"
 
 #include <QMainWindow>
 #include <QPixmap>
@@ -32,7 +33,6 @@ class Logo;
 class LoginDialog;
 class TcpClient;
 class QDockWidget;
-class QListWidget;
 class QTextEdit;
 //0819 [Dock]
 class QTreeView;
@@ -42,6 +42,8 @@ class QPushButton;
 class EventDialog;
 class AddCalendarDialog;
 class QLineEdit;
+// 0820 공유할 캘린더 선택용 콤보박스
+class QComboBox;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -50,13 +52,13 @@ class MainWindow;
 QT_END_NAMESPACE
 
 // 0819[Dock - QtreeView]
-struct CalendarInfo {
-    QString id; // 캘린더 고유 ID (DB Key)
-    QString name; // 표시 이름
-    QColor color; // 표시 색상
-    QString role; // 권한 (owner, editor, viewer 등)
-    bool enabled; // 기본 표시 여부
-};
+// struct CalendarInfo {
+//     int id; // 캘린더 고유 ID (DB Key)
+//     QString name; // 표시 이름
+//     QColor color; // 표시 색상
+//     QString role; // 권한 (owner, editor, viewer 등)
+//     bool visible; // 기본 표시 여부
+// };
 
 class MainWindow : public QMainWindow
 {
@@ -78,8 +80,8 @@ private slots:
     void onLoginFailed(const QString& ErrorMsg);
     void openSignupDialog();
     //0819 [우 Dock] 버튼 클릭시 실행할 slot
-    void onClickAddEvent(); // 일정추가
-    void onClickAddCalendar(); // 캘린더추가
+    void openAddEventDialog(); // 일정추가
+    void openAddCalDialog(); // 캘린더추가
     void onClickShare(); // 달력 공유하기 버튼
 
 private:
@@ -102,6 +104,8 @@ private:
     QPushButton *m_btnAddEvent = nullptr;
     QPushButton *m_btnAddCalendar = nullptr;
     QPushButton *m_btnShare = nullptr;
+    //0820 공유할 달력 선택용 콤보박스 객체 선언
+    QComboBox* m_cmbCalendars = nullptr;
     // 달력과 Dock 세팅하는 함수
     void showCalendarWidget();
     void setupSideDocks();     // ← 최소 도킹 패널 생성
@@ -114,6 +118,12 @@ private:
     void loadCalendars(const QList<CalendarInfo>& list); // 서버/DB목록 로드
     //0819 [우 Dock] 오른쪽 Dock 구성하는 함수
     void setupRightDock();
+    // 0819 달력 왼쪽 도크 새로고침
+    QList<CalendarInfo> m_calCache; // 최신목록 캐시
+    void refreshCalendars(); //
+    void loadCalendarsFromQStringList(const QStringList& names);
+    // 0820 캘린더 id 를 가져오는 함수
+    int currentSelectedCalId() const;
 
 
 };

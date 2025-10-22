@@ -1,5 +1,7 @@
 /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/EWIEGA46WW/moc_eventdialog.cpp: /home/aiot101/바탕화면/calendarApp/calendarClient/eventdialog.h \
   /home/aiot101/바탕화면/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug/calendarClient_autogen/moc_predefs.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QDate \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QStringList \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q17memory.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20functional.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20iterator.h \
@@ -21,6 +23,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearraylist.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qbytearrayview.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcalendar.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qchar.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcompare_impl.h \
@@ -34,6 +37,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qcontiguouscache.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qdarwinhelpers.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qdatastream.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qdatetime.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qdebug.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qendian.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qexceptionhandling.h \
@@ -53,6 +57,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlatin1stringview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qline.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlist.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlocale.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qlogging.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qmalloc.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qmap.h \
@@ -119,6 +124,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtversionchecks.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtypeinfo.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qtypes.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qurl.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qutf8stringview.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvariant.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qvarlengtharray.h \
@@ -139,19 +145,27 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qkeysequence.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpaintdevice.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpalette.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpen.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpixelformat.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpixmap.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qpolygon.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qregion.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qrgb.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qrgba64.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtextcursor.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtextdocument.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtextformat.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtextoption.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtgui-config.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtguiexports.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtguiglobal.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qtransform.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qwindowdefs.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/QDialog \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/QLineEdit \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qdialog.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qframe.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qlineedit.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qsizepolicy.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \

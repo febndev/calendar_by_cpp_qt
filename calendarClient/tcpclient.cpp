@@ -1,9 +1,12 @@
 #include "tcpclient.h"
-#include "logindialog.h"
+//#include "logindialog.h"
+#include "calendarinfo.h"
+
 #include <QDataStream>
 #include <QDebug>
 #include <QThread>
 
+#define PKT_RES_CAL_LIST   "cal_total_list"   // 서버와 동일하게!
 
 enum : quint16 {
     PKT_LOGIN_REQ = 1001, // 예시. 프로젝트의 protocol.h 값으로 교체 가능
@@ -44,7 +47,6 @@ TcpClient::TcpClient(QWidget *parent) : QMainWindow(parent)
     // 이 객체의(MainWindow) slot_displayError 슬롯 함수 실행하여 처리
     connect(m_socket, &QAbstractSocket::errorOccurred,
             this,     &TcpClient::slot_displayError);
-
 
 }
 
@@ -119,15 +121,19 @@ void TcpClient::slot_readSocket()
     QString header = stripPad(buffer.mid(0,128));
     QString type = header.split(",")[0].split(":")[1].trimmed();
 
-    // buffer의 128 byte 이후 부분을
-    QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+    // JSON 데이터는 개행 제거 하면 안되서 이 문장 if문 안으로 이동.
+    // QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
 
     qDebug() << "[클라이언트] Type:" << type;
-    qDebug() << "[클라이언트] Body:" << body;
+    qDebug() << "[TcpClient emit] this=" << this;
 
-    // type에 따른 분기
+    // type에 따른 분기시작
+    // 로그인 성공했을 때 시그널 보내기
     if(type == "login_resp")
     {
+        QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+        qDebug() << "[클라이언트] Body:" << body;
+
         if (body == "LOGIN_OK"){
             qDebug() << "[클라이언트] Login successful!";
             emit loginSuccess();
@@ -145,13 +151,94 @@ void TcpClient::slot_readSocket()
             emit loginFailed("알 수 없는 오류가 발생했습니다.");
         }
     }
+    // 회원가입 성공했을 때 시그널 전송
     else if(type=="signup_resp")
     {
+        QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+        qDebug() << "[클라이언트] Body:" << body;
+
         if(body =="SIGNUP_OK"){
             qDebug() << "[클라이언트] Signup successful!";
             emit signupSuccess();
         }
         else {emit signupFailed("회원가입 실패!");}
+    }
+    // 아 이거 필요하네 addCalsuccess(); 신호 보내야 되니까 필요하네
+    // sendOkToClient 수정 해야되네
+    else if (type == "cal_resp")
+    {
+        QString body = stripPad(QString::fromUtf8(buffer.mid(128)));
+        qDebug() << "[클라이언트] Body:" << body;
+
+        if(body == "CREATE_OK"){
+            qDebug() << "[클라이언트] 달력만들기 성공";
+            emit addCalSuccess();
+        }
+        else {emit addCalFailed("달력 추가 실패!");}
+    }
+
+    // 캘린더 목록, 값 가져오기
+    // JSon 으로 받아서 다시 lst 만들어야되나.. ?
+    else if (type == "cal_list")
+    {
+        QByteArray body = buffer.mid(128);
+        qDebug() << "[클라이언트] Body:" << body;
+        QJsonDocument doc;
+        QList<CalendarInfo> calList;
+        QStringList calNameList;
+        while (true) {
+            int eol = body.indexOf('\n');
+            if (eol < 0) {
+                // 더 이상 완전한 한 줄이 없으면 루프 종료
+                break;
+            }
+            QByteArray line = body.left(eol);
+            body.remove(0, eol + 1);
+
+            // 빈 라인은 건너 뛰기
+            if (line.trimmed().isEmpty()){
+                continue;
+            }
+
+            QJsonParseError err;
+            doc = QJsonDocument::fromJson(line, &err);
+            if (err.error != QJsonParseError::NoError) {
+                qWarning() << "[JSON] parse error:" << err.errorString()
+                << "line:" << line;
+                continue; // 파싱 실패한 라인은 스킵
+            }
+            if (!doc.isObject()) {
+                qWarning() << "[JSON] not an object" << line;
+                continue;
+            }
+
+            QJsonObject obj = doc.object();
+
+            CalendarInfo ci{};
+            ci.id   = obj.value("id").toInt();
+            ci.name = obj.value("name").toString();
+
+            QString colorHex = obj.value("color").toString("#787878");
+            QColor color(colorHex);
+            ci.color = color.isValid() ? color : QColor(120,120,120);
+
+            if (obj.contains("role"))
+                ci.role = obj.value("role").toString();
+            else
+                ci.role = obj.value("can_edit").toInt() ? "editor" : "viewer";
+
+            const QJsonValue vis = obj.value("visible");
+            ci.can_Edit = vis.isBool() ? vis.toBool()
+                                      : (vis.isDouble() ? (vis.toInt()!=0) : true);
+
+            calList.append(ci);
+            calNameList.append(ci.name);
+        }
+
+        emit calendarListUpdated(calList);
+
+        // 여기서 캘린더이름 목록 만들어서 업데이트하기
+        emit calendarNameListUpdated(calNameList);
     }
 }
 
@@ -251,6 +338,91 @@ void TcpClient::sendSignupRequest(const QString &id,
     else
         QMessageBox::critical(this, "QTCPClient", "Not connected");
 }
+
+// 0819 [캘린더추가] 서버로 정보 보내는 함수
+void TcpClient::sendAddCalRequest(const QString& calName, bool is_Public){
+    if(m_socket){
+        if(m_socket->isOpen()){
+            QString str = QString("%1|%2")
+                .arg(calName)
+                .arg(is_Public);
+
+            QDataStream socketStream(m_socket);
+            socketStream.setVersion(QDataStream::Qt_6_0);
+
+            // header 부분에 type을 addCal으로 설정
+            QByteArray header;
+            header.prepend(QString("type:addCal,name:null,size:%1")
+                               .arg(str.size()).toUtf8());
+            header.resize(128);
+
+            // 인코딩 설정하고 QByteArray에 할당
+            QByteArray byteArray = str.toUtf8();
+            byteArray.prepend(header);
+
+            // 디버깅 코드
+            qDebug() << "[CLIENT] Sending packet size:" << byteArray.size();
+            qDebug() << "[CLIENT] Header:" << header;
+            qDebug() << "[CLIENT] Body:" << str;
+
+            // 소켓으로 전송
+            socketStream << byteArray;
+            m_socket->flush();
+            m_socket->waitForBytesWritten(3000);
+
+            qDebug() << "[CLIENT] Data sent successfully";
+        }
+        else
+            QMessageBox::critical(this, "QTCPClient", "Socket doesn't seem to be opened");
+    }
+    else
+        QMessageBox::critical(this, "QTCPClient", "Not connected");
+}
+
+//0820 캘린더 공유 서버에 요청하는 함수
+void TcpClient::sendInviteRequest(const QString& inviteeId, int calId)
+{
+    if(m_socket)
+    {
+        if(m_socket->isOpen())
+        {
+            QString str = QString("%1|%2").arg(inviteeId).arg(calId);
+            qDebug() << "[CLIENT] Sending login data:" << str;
+
+            // stream으로 보내기
+            QDataStream socketStream(m_socket);
+            socketStream.setVersion(QDataStream::Qt_6_0);
+
+            // header 부분에 type을 invite으로 설정
+            QByteArray header;
+            header.prepend(QString("type:invite,name:null,size:%1")
+                               .arg(str.size()).toUtf8());
+            header.resize(128);
+
+            // login 인코딩 설정하고 QByteArray에 할당
+            QByteArray byteArray = str.toUtf8();
+            byteArray.prepend(header);
+
+            // 디버깅 코드
+            qDebug() << "[CLIENT] Sending packet size:" << byteArray.size();
+            qDebug() << "[CLIENT] Header:" << header;
+            qDebug() << "[CLIENT] Body:" << str;
+
+            // 소켓으로 전송
+            socketStream << byteArray;
+            m_socket->flush();
+            m_socket->waitForBytesWritten(3000);
+
+            qDebug() << "[CLIENT] Data sent successfully";
+        }
+
+        else
+            QMessageBox::critical(this, "QTCPClient", "Socket doesn't seem to be opened");
+    }
+    else
+        QMessageBox::critical(this, "QTCPClient", "Not connected");
+}
+
 // 0818 [API] "월별 이벤트 카운트" 요청 보내기 정의
 quint32 TcpClient::requestMonthCounts(const QDate& from, const QDate& to, const QStringList& calendarIds)
 {
@@ -269,3 +441,14 @@ quint32 TcpClient::requestMonthCounts(const QDate& from, const QDate& to, const 
     // 호출하는 쪽에서 reqId 값을 사용하지 않는다면 자료형을 void로 바꾸고 이 코드 지워도 됨.
     return reqId;
 }
+
+// void TcpClient::slot_calLstReadyRead(){
+
+//     QByteArray data = m_socket->readAll();
+//     QString msg = QString::fromUtf8(data);
+
+//     // 서버에서 "캘린더1|캘린더2|캘린더3" 형식으로 보내주는 걸 리스트에 저장
+//     QStringList calendars = msg.split("|", Qt::SkipEmptyParts);
+
+//     emit calendarListUpdated(calendars); // MainWindow에 알려줌
+// }

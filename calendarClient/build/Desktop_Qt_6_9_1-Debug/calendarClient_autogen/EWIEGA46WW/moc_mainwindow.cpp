@@ -46,8 +46,8 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         "onLoginFailed",
         "ErrorMsg",
         "openSignupDialog",
-        "onClickAddEvent",
-        "onClickAddCalendar",
+        "openAddEventDialog",
+        "openAddCalDialog",
         "onClickShare"
     };
 
@@ -62,9 +62,9 @@ template <> constexpr inline auto MainWindow::qt_create_metaobjectdata<qt_meta_t
         }}),
         // Slot 'openSignupDialog'
         QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onClickAddEvent'
+        // Slot 'openAddEventDialog'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onClickAddCalendar'
+        // Slot 'openAddCalDialog'
         QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'onClickShare'
         QtMocHelpers::SlotData<void()>(9, 2, QMC::AccessPrivate, QMetaType::Void),
@@ -95,8 +95,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->onLoginSuccess(); break;
         case 2: _t->onLoginFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 3: _t->openSignupDialog(); break;
-        case 4: _t->onClickAddEvent(); break;
-        case 5: _t->onClickAddCalendar(); break;
+        case 4: _t->openAddEventDialog(); break;
+        case 5: _t->openAddCalDialog(); break;
         case 6: _t->onClickShare(); break;
         default: ;
         }

@@ -8,6 +8,7 @@
 
 #include "../../../../tcpclient.h"
 #include <QtCore/qmetatype.h>
+#include <QtCore/QList>
 
 #include <QtCore/qtmochelpers.h>
 
@@ -57,11 +58,25 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         "to",
         "QMap<QDate,int>",
         "counts",
+        "addCalSuccess",
+        "addCalFailed",
+        "calendarListUpdated",
+        "QList<CalendarInfo>",
+        "calList",
+        "calendarNameListUpdated",
+        "calNameList",
+        "inviteCalSuccess",
+        "inviteCalFailed",
+        "reason",
+        "calendarListDirty",
+        "eventsDirty",
+        "calId",
         "slot_discardSocket",
         "slot_displayError",
         "QAbstractSocket::SocketError",
         "socketError",
-        "slot_readSocket"
+        "slot_readSocket",
+        "slot_calLstReadyRead"
     };
 
     QtMocHelpers::UintData qt_methods {
@@ -93,14 +108,42 @@ template <> constexpr inline auto TcpClient::qt_create_metaobjectdata<qt_meta_ta
         QtMocHelpers::SignalData<void(quint32, QDate, QDate, QMap<QDate,int>)>(13, 2, QMC::AccessPublic, QMetaType::Void, {{
             { QMetaType::UInt, 14 }, { QMetaType::QDate, 15 }, { QMetaType::QDate, 16 }, { 0x80000000 | 17, 18 },
         }}),
+        // Signal 'addCalSuccess'
+        QtMocHelpers::SignalData<void()>(19, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'addCalFailed'
+        QtMocHelpers::SignalData<void(const QString &)>(20, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 6 },
+        }}),
+        // Signal 'calendarListUpdated'
+        QtMocHelpers::SignalData<void(const QList<CalendarInfo>)>(21, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 22, 23 },
+        }}),
+        // Signal 'calendarNameListUpdated'
+        QtMocHelpers::SignalData<void(const QStringList)>(24, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QStringList, 25 },
+        }}),
+        // Signal 'inviteCalSuccess'
+        QtMocHelpers::SignalData<void()>(26, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'inviteCalFailed'
+        QtMocHelpers::SignalData<void(const QString &)>(27, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::QString, 28 },
+        }}),
+        // Signal 'calendarListDirty'
+        QtMocHelpers::SignalData<void()>(29, 2, QMC::AccessPublic, QMetaType::Void),
+        // Signal 'eventsDirty'
+        QtMocHelpers::SignalData<void(int)>(30, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Int, 31 },
+        }}),
         // Slot 'slot_discardSocket'
-        QtMocHelpers::SlotData<void()>(19, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(32, 2, QMC::AccessPrivate, QMetaType::Void),
         // Slot 'slot_displayError'
-        QtMocHelpers::SlotData<void(QAbstractSocket::SocketError)>(20, 2, QMC::AccessPrivate, QMetaType::Void, {{
-            { 0x80000000 | 21, 22 },
+        QtMocHelpers::SlotData<void(QAbstractSocket::SocketError)>(33, 2, QMC::AccessPrivate, QMetaType::Void, {{
+            { 0x80000000 | 34, 35 },
         }}),
         // Slot 'slot_readSocket'
-        QtMocHelpers::SlotData<void()>(23, 2, QMC::AccessPrivate, QMetaType::Void),
+        QtMocHelpers::SlotData<void()>(36, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'slot_calLstReadyRead'
+        QtMocHelpers::SlotData<void()>(37, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -133,16 +176,25 @@ void TcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 6: _t->disconnected(); break;
         case 7: _t->errorOccurred((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 8: _t->monthCountsReceived((*reinterpret_cast< std::add_pointer_t<quint32>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QDate>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QDate>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<QMap<QDate,int>>>(_a[4]))); break;
-        case 9: _t->slot_discardSocket(); break;
-        case 10: _t->slot_displayError((*reinterpret_cast< std::add_pointer_t<QAbstractSocket::SocketError>>(_a[1]))); break;
-        case 11: _t->slot_readSocket(); break;
+        case 9: _t->addCalSuccess(); break;
+        case 10: _t->addCalFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 11: _t->calendarListUpdated((*reinterpret_cast< std::add_pointer_t<QList<CalendarInfo>>>(_a[1]))); break;
+        case 12: _t->calendarNameListUpdated((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
+        case 13: _t->inviteCalSuccess(); break;
+        case 14: _t->inviteCalFailed((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
+        case 15: _t->calendarListDirty(); break;
+        case 16: _t->eventsDirty((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 17: _t->slot_discardSocket(); break;
+        case 18: _t->slot_displayError((*reinterpret_cast< std::add_pointer_t<QAbstractSocket::SocketError>>(_a[1]))); break;
+        case 19: _t->slot_readSocket(); break;
+        case 20: _t->slot_calLstReadyRead(); break;
         default: ;
         }
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         switch (_id) {
         default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
-        case 10:
+        case 18:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
             case 0:
@@ -170,6 +222,22 @@ void TcpClient::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
             return;
         if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(quint32 , QDate , QDate , QMap<QDate,int> )>(_a, &TcpClient::monthCountsReceived, 8))
             return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)()>(_a, &TcpClient::addCalSuccess, 9))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QString & )>(_a, &TcpClient::addCalFailed, 10))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QList<CalendarInfo> )>(_a, &TcpClient::calendarListUpdated, 11))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QStringList )>(_a, &TcpClient::calendarNameListUpdated, 12))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)()>(_a, &TcpClient::inviteCalSuccess, 13))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(const QString & )>(_a, &TcpClient::inviteCalFailed, 14))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)()>(_a, &TcpClient::calendarListDirty, 15))
+            return;
+        if (QtMocHelpers::indexOfMethod<void (TcpClient::*)(int )>(_a, &TcpClient::eventsDirty, 16))
+            return;
     }
 }
 
@@ -192,14 +260,14 @@ int TcpClient::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 21;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 21)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 21;
     }
     return _id;
 }
@@ -256,5 +324,53 @@ void TcpClient::errorOccurred(const QString & _t1)
 void TcpClient::monthCountsReceived(quint32 _t1, QDate _t2, QDate _t3, QMap<QDate,int> _t4)
 {
     QMetaObject::activate<void>(this, &staticMetaObject, 8, nullptr, _t1, _t2, _t3, _t4);
+}
+
+// SIGNAL 9
+void TcpClient::addCalSuccess()
+{
+    QMetaObject::activate(this, &staticMetaObject, 9, nullptr);
+}
+
+// SIGNAL 10
+void TcpClient::addCalFailed(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 10, nullptr, _t1);
+}
+
+// SIGNAL 11
+void TcpClient::calendarListUpdated(const QList<CalendarInfo> _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 11, nullptr, _t1);
+}
+
+// SIGNAL 12
+void TcpClient::calendarNameListUpdated(const QStringList _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 12, nullptr, _t1);
+}
+
+// SIGNAL 13
+void TcpClient::inviteCalSuccess()
+{
+    QMetaObject::activate(this, &staticMetaObject, 13, nullptr);
+}
+
+// SIGNAL 14
+void TcpClient::inviteCalFailed(const QString & _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 14, nullptr, _t1);
+}
+
+// SIGNAL 15
+void TcpClient::calendarListDirty()
+{
+    QMetaObject::activate(this, &staticMetaObject, 15, nullptr);
+}
+
+// SIGNAL 16
+void TcpClient::eventsDirty(int _t1)
+{
+    QMetaObject::activate<void>(this, &staticMetaObject, 16, nullptr, _t1);
 }
 QT_WARNING_POP

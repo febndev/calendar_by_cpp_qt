@@ -61,7 +61,7 @@ private:
     // 내부 위젯들(디자이너 없이 코드로 생성)
     QCalendarWidget* m_cal; // 달력 본체
     QLabel* m_title; // 상단 "YYYY년 M월"제목
-    // 서버와 통신할 TcpClient 주입 받은거기 때문에 중복 아님
+    // 서버와 통신할 TcpClient, 주입 받은거기 때문에 중복 아님
     TcpClient* m_tcp = nullptr;
 
     // 날짜별 이벤트 개수(0~N). 1~4개까지 점으로 표시

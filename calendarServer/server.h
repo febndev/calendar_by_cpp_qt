@@ -18,8 +18,14 @@
 #include <QString>
 #include <QStringList>
 #include <QByteArray>
-
-// #include "clienthandler.h"
+//0819 [DB] 회원가입시 개인 캘린더 자동 추가하기 위해서 헤더파일 삽입
+#include <QDataStream>
+#include <QHash>
+#include <QVariant>
+// 0821 [JSON]
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 class Server : public QMainWindow { //UI 로 서버 상태를 확인할 수도 있으니까 QTcpServer 가 아닌 QMainWindow 상속
     Q_OBJECT
@@ -31,16 +37,29 @@ public:
 private:
     QTcpServer* m_server;
     QSet<QTcpSocket*> qset_connectedClients;
+    // 사용자 코드 usercode
+    QHash<QTcpSocket*, int> m_userBySocket;
 
     void appendToSocketList(QTcpSocket* socket); // 소켓 리스트에 추가
     void sendErrorToClient(QTcpSocket *clientSocket, const QString &errorMsg);
     void sendOkToClient(QTcpSocket *clientSocket, const QString &okMsg);
+    //0819 앞에 Type 추가 하는 함수
+    // void sendTyped(QTcpSocket *clientSocket, const QString& respType, const QString& body);
+    void sendCalendarList(QTcpSocket* socket, int userId);
+    //0820 [캘린더 초대]
+    // 로그인 사용자 찾기 등 사용자 구분 함수
+    int userCodeOf(QTcpSocket* sock) const;
+    // 초대처리
+    bool inviteUserToCalendar(int calId, const QString& inviteeLoginId,
+                              int inviterCode, QString* err);
+    void notifyUserCalendarsDirty(int userCode); // 알림 브로드캐스트
+    void sendCalendarTotalList(QTcpSocket* socket, int userCode);
 
 
 signals:
     // 클라이언트로부터 캘린더 데이터(요청/응답) 수신 시 알림
     void signal_newEvent(const QString &jsonData);
-    // 아직 무슨 함수가 필요한지 제대로 안정해져서 막 적었음.
+
     //0814 코드 시작
     // 로그인 검증 결과 전송 시그널 (이 신호를 TcpClient에서 받아서 달력창을 띄우라고 시그널을 보내야함)
     void signal_loginResult();
@@ -52,18 +71,6 @@ private slots:
     void slot_discardSocket();
     void slot_readSocket();
     void slot_displayError(QAbstractSocket::SocketError socketError);
-    //여기서부터는 그냥 일단 적었음.
-    //void slot_displayedEvent();
-
-    //void on_pushButtonLogin();
-    //void on_pushButtonSignup();
-
-    // 0814 코드
-    // 로그인 신호가 오면 (TcpClient 에서 시그널을 보내야함) 처리하는 slot 함수
-    //void slot_checkLogin();
-    // 회원가입 신호가 오면 (TcpClient에서 시그널을 보내야함) 저장하고 저장 완료했다고 시그널을 쏴야함
-    //void slot_saveSignup();
-    // 아니 잠깐만 이거 하면 안된다는거잖아. slot_readSocket()에서 분기해야된다는 거잖아.
 
 };
 #endif // SERVER_H

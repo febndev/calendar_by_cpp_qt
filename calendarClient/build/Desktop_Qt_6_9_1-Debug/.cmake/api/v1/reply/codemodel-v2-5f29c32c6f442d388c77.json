@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-f5305179f1af78acfe69.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "calendarClient",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "calendarClient::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-calendarClient-Debug-8b2b6989dacc6f057d4a.json",
+					"name" : "calendarClient",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "calendarClient_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-calendarClient_autogen-Debug-9b998cfd0493736742b8.json",
+					"name" : "calendarClient_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "calendarClient_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-calendarClient_autogen_timestamp_deps-Debug-eaa8b541fd1a298b15b2.json",
+					"name" : "calendarClient_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendarClient/build/Desktop_Qt_6_9_1-Debug",
+		"source" : "/home/aiot101/\ubc14\ud0d5\ud654\uba74/calendarApp/calendarClient"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

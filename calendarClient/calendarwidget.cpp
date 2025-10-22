@@ -74,12 +74,12 @@ CalendarWidget::CalendarWidget(TcpClient* tcp, QWidget *parent)
     requestCountsForCurrentMonth();
 
     // 데모용 데이터(원하면 삭제)
-    QMap<QDate,int> demo;
-    QDate today = QDate::currentDate();
-    demo[today] = 3;
-    demo[today.addDays(2)] = 1;
-    demo[today.addDays(5)] = 5; // 4개까지만 점 표시
-    setEventCounts(demo);
+    // QMap<QDate,int> demo;
+    // QDate today = QDate::currentDate();
+    // demo[today] = 3;
+    // demo[today.addDays(2)] = 1;
+    // demo[today.addDays(5)] = 5; // 4개까지만 점 표시
+    // setEventCounts(demo);
     // 근데 왜 점이 표시가 안되냐고
 
 }
