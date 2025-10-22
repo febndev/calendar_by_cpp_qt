@@ -9,6 +9,7 @@
 #include "../../../../eventdialog.h"
 #include <QtGui/qtextcursor.h>
 #include <QtCore/qmetatype.h>
+#include <QtCore/QList>
 
 #include <QtCore/qtmochelpers.h>
 
@@ -44,6 +45,7 @@ template <> constexpr inline auto EventDialog::qt_create_metaobjectdata<qt_meta_
         "",
         "byteArray",
         "setCalendars",
+        "QList<CalendarInfo>",
         "calendars",
         "onSubmitButtonClicked",
         "onCancelButtonClicked"
@@ -55,13 +57,13 @@ template <> constexpr inline auto EventDialog::qt_create_metaobjectdata<qt_meta_
             { QMetaType::QByteArray, 3 },
         }}),
         // Slot 'setCalendars'
-        QtMocHelpers::SlotData<void(const QStringList &)>(4, 2, QMC::AccessPublic, QMetaType::Void, {{
-            { QMetaType::QStringList, 5 },
+        QtMocHelpers::SlotData<void(const QList<CalendarInfo> &)>(4, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { 0x80000000 | 5, 6 },
         }}),
         // Slot 'onSubmitButtonClicked'
-        QtMocHelpers::SlotData<void()>(6, 2, QMC::AccessPrivate, QMetaType::Void),
-        // Slot 'onCancelButtonClicked'
         QtMocHelpers::SlotData<void()>(7, 2, QMC::AccessPrivate, QMetaType::Void),
+        // Slot 'onCancelButtonClicked'
+        QtMocHelpers::SlotData<void()>(8, 2, QMC::AccessPrivate, QMetaType::Void),
     };
     QtMocHelpers::UintData qt_properties {
     };
@@ -86,10 +88,22 @@ void EventDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
         case 0: _t->addEventRequested((*reinterpret_cast< std::add_pointer_t<QByteArray>>(_a[1]))); break;
-        case 1: _t->setCalendars((*reinterpret_cast< std::add_pointer_t<QStringList>>(_a[1]))); break;
+        case 1: _t->setCalendars((*reinterpret_cast< std::add_pointer_t<QList<CalendarInfo>>>(_a[1]))); break;
         case 2: _t->onSubmitButtonClicked(); break;
         case 3: _t->onCancelButtonClicked(); break;
         default: ;
+        }
+    }
+    if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 1:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QList<CalendarInfo> >(); break;
+            }
+            break;
         }
     }
     if (_c == QMetaObject::IndexOfMethod) {
@@ -123,7 +137,7 @@ int EventDialog::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
         if (_id < 4)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+            qt_static_metacall(this, _c, _id, _a);
         _id -= 4;
     }
     return _id;

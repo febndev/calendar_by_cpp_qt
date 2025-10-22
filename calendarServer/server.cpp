@@ -353,7 +353,7 @@ void Server::slot_readSocket()
     }
     else if (type == "cal_list_req"){
         int userid = m_userBySocket.value(socket, 0);
-        sendCalendarList(socket, userid);
+        sendCalendarTotalList(socket, userid);
     }
     else if (type == "add_event"){
         qDebug() << "일정 추가 시작";

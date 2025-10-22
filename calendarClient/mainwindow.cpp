@@ -551,34 +551,39 @@ void MainWindow::openAddEventDialog()
     qDebug() << "[openAddEventDialog] ENTER";
     const int calId = currentSelectedCalId();
     // “일정 추가” 다이얼로그 열기 (선택한 날짜/캘린더 등은 이후 개선)
-    EventDialog dlg(this);
-    dlg.setCalendarId(calId); // ← 세터로 주입
-
+    EventDialog* dlg = new EventDialog(this);
+    dlg->setCalendarId(calId); // ← 세터로 주입
+    // 시그널-슬롯 연결 (중복 방지 위해 UniqueConnection 권장)
+    connect(dlg, &EventDialog::addEventRequested,
+            tcp, &TcpClient::sendAddEventRequest,
+            Qt::UniqueConnection);
     // TcpClient의 목록 업데이트 시그널을 다이얼로그 슬롯으로 연결
-    bool ok = connect(tcp, &TcpClient::calendarListUpdated,
-                      &dlg, &EventDialog::setCalendars);
+    bool ok = connect(tcp, &TcpClient::calendarTotalListUpdated,
+                      dlg, &EventDialog::setCalendars, Qt::UniqueConnection);
     qDebug() << "connect(TcpClient->EventDialog) ="<<ok << "tcp = "<<tcp << "dlg: "<<&dlg;
 
     // 진단용: MainWindow에서도 신호를 받아보자
-    connect(tcp, &TcpClient::calendarListUpdated, this, [](const QStringList& ls){
-        qDebug() << "[MW] got calendarListUpdated:" << ls;
+    connect(tcp, &TcpClient::calendarTotalListUpdated, this, [](const QList<CalendarInfo> ls){
+        //qDebug() << "[MW] got calendarListUpdated:" << ls;
     });
 
     // 이미 받아둔 목록이 있으면 즉시 반영(emit 선행 대비)
-    if (!tcp->calNameList().isEmpty()) {
+    if (!tcp->calTotalList().isEmpty()) {
         qDebug() << "[openAddEventDialog] priming from cache";
-        dlg.setCalendars(tcp->calNameList());
+        dlg->setCalendars(tcp->calTotalList());
+        dlg->exec();
+
     } else {
         qDebug() << "[openAddEventDialog] cache empty -> requesting list";
         qDebug() << "[openAddEventDialog] BEFORE sendCalendarListRequest";
 
         tcp->sendCalendarListRequest();  // 🔴 목록 재요청 API가 있다면 꼭 호출
         qDebug() << "[openAddEventDialog] AFTER sendCalendarListRequest";
+        dlg->exec();
 
     }
-    dlg.setCalendars(tcp->calNameList());
+    dlg->setCalendars(tcp->calTotalList());
 
-    dlg.exec();
     // TODO: dlg.setDefaultDate(selectedDate);  // 달력 선택과 연동하면 베스트
     // if (dlg.exec() == QDialog::Accepted) {
     //     // 다이얼로그에서 입력받은 정보를 서버로 등록 요청

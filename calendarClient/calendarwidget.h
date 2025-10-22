@@ -12,6 +12,17 @@
 #include <QTextCharFormat>
 #include <QToolTip>
 #include <QStringList>
+#include <QSet>
+#include <QHash>
+#include <QMultiHash>
+#include <QVector>
+#include <QPainter>
+#include <QEvent>
+#include <QCursor>
+#include <QDateTime>
+
+#include "EventDto.h"
+#include "calendarinfo.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -40,6 +51,9 @@ public slots:
     void goToday();
     // 활성 캘린더 Id 리스트 설정 (필터 체크박스와 연결)
     void setActiveCalendars(const QStringList& ids);
+
+protected:
+    bool eventFilter(QObject*, QEvent*) override;
 
 private slots:
 
@@ -70,6 +84,10 @@ private:
     QStringList m_activeCals;
     // 마지막으로 보낸 요청 ID (응답 매칭용이라는데 이거 뭔지 하나도 모르것다 시부
     quint32 m_lastReqId = 0;
+
+    //0823 [일정표시]
+    QWidget* m_overlay = nullptr; // 도트를 찍기 위해서 오버레이 추가
+    void paintDotsOnOverlay(QPainter& p, const QRect& vpRect); // 오버레이용 그리기 헬퍼
     // 제목 초기세팅으로 다시 표시
     void rebuildTitle();
     // 날짜에 이벤트 수만큼 점 표시

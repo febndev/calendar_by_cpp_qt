@@ -34,3 +34,10 @@
 23	2109	1755861624862494484	CMakeFiles/calendarServer.dir/mainwindow.cpp.o	625d292f1fdc3605
 24	3435	1755861624863494489	CMakeFiles/calendarServer.dir/server.cpp.o	8e399ec175af7ebe
 3436	3900	1755861628275512895	calendarServer	8f07b57a1ad02208
+5	23	1755934031368057156	calendarServer_autogen/timestamp	fbed70426c8e31f3
+5	23	1755934031368057156	calendarServer_autogen/mocs_compilation.cpp	fbed70426c8e31f3
+5	23	1755934031368057156	/home/aiot101/바탕화면/calendarApp/calendarServer/build/Desktop_Qt_6_9_1-Debug/calendarServer_autogen/timestamp	fbed70426c8e31f3
+5	23	1755934031368057156	/home/aiot101/바탕화면/calendarApp/calendarServer/build/Desktop_Qt_6_9_1-Debug/calendarServer_autogen/mocs_compilation.cpp	fbed70426c8e31f3
+23	1801	1755934031386056895	CMakeFiles/calendarServer.dir/mainwindow.cpp.o	625d292f1fdc3605
+23	2883	1755934031387608825	CMakeFiles/calendarServer.dir/server.cpp.o	8e399ec175af7ebe
+2883	3321	1755934034246015537	calendarServer	8f07b57a1ad02208

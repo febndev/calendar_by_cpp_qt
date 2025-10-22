@@ -1,6 +1,7 @@
 #ifndef EVENTDIALOG_H
 #define EVENTDIALOG_H
 
+#include "calendarinfo.h"
 #include <QDialog>
 #include <QDate>
 #include <QLineEdit>
@@ -11,6 +12,7 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QDateTime>
+#include <QMessageBox>
 
 namespace Ui {
 class EventDialog;
@@ -30,7 +32,7 @@ public:
 
 public slots:
     // 캘린더 목록을 받아서 콤보박스 채우는 슬롯
-    void setCalendars(const QStringList& calendars);
+    void setCalendars(const QList<CalendarInfo>& calendars);
 
 private slots:
     // 일정 추가/ 수정 버튼 눌렀을 때 할 일

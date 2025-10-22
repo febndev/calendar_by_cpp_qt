@@ -7,6 +7,8 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonObject \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonParseError \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QJsonValue \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QMetaType \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QString \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/QStringList \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q17memory.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/q20functional.h \
@@ -146,6 +148,7 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qversiontagging.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qxptype_traits.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtCore/qyieldcpu.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/QColor \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qaction.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qbitmap.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qbrush.h \
@@ -178,14 +181,18 @@
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtGui/qwindowdefs.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/QDialog \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/QLineEdit \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/QMessageBox \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qdialog.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qframe.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qlineedit.h \
+  /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qmessagebox.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qsizepolicy.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
   /home/aiot101/Qt/6.9.1/gcc_64/include/QtWidgets/qwidget.h \
+  /home/aiot101/바탕화면/calendarApp/calendarClient/calendarinfo.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \

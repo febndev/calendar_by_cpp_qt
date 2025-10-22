@@ -480,7 +480,6 @@ void TcpClient::sendCalendarListRequest(){
             QByteArray byteArray = body.toUtf8();
             byteArray.prepend(header);
 
-
             socketStream << byteArray;
 
             m_socket->flush();

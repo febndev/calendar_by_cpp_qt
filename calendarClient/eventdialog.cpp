@@ -38,13 +38,28 @@ EventDialog::~EventDialog()
 }
 
 
-void EventDialog::setCalendars(const QStringList &calendars)
+void EventDialog::setCalendars(const QList<CalendarInfo>& calendars)
 {
-    qDebug() << "[EventDialog] setCalendars called with" << calendars
-             << "this=" << this << "cmb=" << ui->cmbCalendar;
-    qDebug() << "[EventDialog] setCalendars called: "<< calendars;
+    qDebug() << "EventDialog::setCalendars 실행 this=" << this
+             << " ui->cmbCalendar=" << ui->cmbCalendar
+             << " calendars.size=" << calendars.size();
     ui->cmbCalendar->clear();
-    ui->cmbCalendar->addItems(calendars);
+    for (const auto& cal : calendars) {
+        ui->cmbCalendar->addItem(cal.name, cal.id); // id를 itemData로 저장
+    }
+
+    // 선택 변경 시 m_calendarId 갱신
+    connect(ui->cmbCalendar, &QComboBox::currentIndexChanged,
+            this, [this](int idx){
+                m_calendarId = ui->cmbCalendar->itemData(idx).toInt();
+            });
+
+    // 최소 한 번은 유효한 값으로 맞춰주기
+    if (ui->cmbCalendar->count() > 0) {
+        ui->cmbCalendar->setCurrentIndex(0); // 시그널 타면서 m_calendarId 세팅됨
+
+    }
+    // ui->cmbCalendar->addItems(calendars);
 
     qDebug() << "[EventDialog] cmbCalendar count =" << ui->cmbCalendar->count();
 
@@ -57,12 +72,41 @@ void EventDialog::onCancelButtonClicked(){
 
 void EventDialog::onSubmitButtonClicked(){
 
-    EventDto addEvent;
     qDebug() << "[EventDialog] submit() this=" << this
              << " m_calendarId=" << m_calendarId;
 
-    const int calId = m_calendarId;
+    int calId = m_calendarId;
+    if (calId <= 0) { // -1 또는 0 같은 비정상 값이면 콤보박스에서 재시도
+        if (ui->cmbCalendar && ui->cmbCalendar->count() > 0) {
+            calId = ui->cmbCalendar->currentData().toInt();
+        }
+    }
 
+    // 0-1) 최종 방어: 그래도 유효하지 않으면 진행 중단
+    if (calId <= 0) {
+        QMessageBox::warning(this, tr("캘린더"), tr("캘린더를 먼저 선택하세요."));
+        qWarning() << "[EventDialog] submit blocked: invalid calId =" << calId
+                   << "(m_calendarId=" << m_calendarId << ")";
+        return;
+    }
+
+    // 1) 기본 입력값 검증 (제목 공백 금지)
+    const QString title = ui->edtTitle->text().trimmed();
+    if (title.isEmpty()) {
+        QMessageBox::warning(this, tr("입력 확인"), tr("제목을 입력하세요."));
+        return;
+    }
+
+    // 2) 시간 검증 (종료가 시작보다 빠르면 막기)
+    const QDateTime startDt = ui->dateTimeEdit->dateTime();
+    const QDateTime endDt   = ui->dateTimeEdit_2->dateTime();
+    if (endDt < startDt) {
+        QMessageBox::warning(this, tr("시간 확인"), tr("종료 시간이 시작 시간보다 빠릅니다."));
+        return;
+    }
+
+    EventDto addEvent;
+    addEvent.calendarId = calId;
     addEvent.title = ui->edtTitle->text().trimmed();
     addEvent.memo = ui->txtMemo->toPlainText();
     addEvent.startUtc = (ui->dateTimeEdit->dateTime())
@@ -81,7 +125,7 @@ void EventDialog::onSubmitButtonClicked(){
     obj["memo"] = addEvent.memo;
     obj["start_time"] = addEvent.startUtc;
     obj["end_time"] = addEvent.endUtc;
-    qDebug() << "[일정추가: ]" << obj;
+    qDebug() << "[일정추가 JSON: ]" << obj;
 
     QByteArray body = QJsonDocument(obj).toJson(QJsonDocument::Compact);
     body += '\n';
